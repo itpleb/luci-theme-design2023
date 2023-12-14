@@ -1,32 +1,32 @@
 <div align="center">
   <h1 align="center">
-    LuCI design theme for OpenWrt
+    LuCI vdesign theme for OpenWrt
   </h1>
 <a href="/LICENSE">
-    <img src="https://img.shields.io/github/license/gngpp/luci-theme-design?style=flat&a=1" alt="">
+    <img src="https://img.shields.io/github/license/gngpp/luci-theme-vdesign?style=flat&a=1" alt="">
   </a>
-  <a href="https://github.com/gngpp/luci-theme-design/pulls">
+  <a href="https://github.com/gngpp/luci-theme-vdesign/pulls">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="">
-  </a><a href="https://github.com/gngpp/luci-theme-design/issues/new">
+  </a><a href="https://github.com/gngpp/luci-theme-vdesign/issues/new">
     <img src="https://img.shields.io/badge/Issues-welcome-brightgreen.svg?style=flat">
-  </a><a href="https://github.com/gngpp/luci-theme-design/releases">
-    <img src="https://img.shields.io/github/release/gngpp/luci-theme-design.svg?style=flat">
-  </a><a href="hhttps://github.com/gngpp/luci-theme-design/releases">
-    <img src="https://img.shields.io/github/downloads/gngpp/luci-theme-design/total?style=flat&?">
+  </a><a href="https://github.com/gngpp/luci-theme-vdesign/releases">
+    <img src="https://img.shields.io/github/release/gngpp/luci-theme-vdesign.svg?style=flat">
+  </a><a href="hhttps://github.com/gngpp/luci-theme-vdesign/releases">
+    <img src="https://img.shields.io/github/downloads/gngpp/luci-theme-vdesign/total?style=flat&?">
   </a>
 </div>
 <br>
 
 <br>简体中文 | [English](README_en.md)
 
-# luci-theme-design
+# luci-theme-vdesign
 
- luci-theme-design 是一个针对移动端和PC端的沉浸式WebApp体验和优化的OpenWrt LuCI主题
-- **luci-theme-design**基于luci-theme-neobird二次开发, 适用于[lede](https://github.com/coolsnowwolf/lede)
+ luci-theme-vdesign 是一个针对移动端和PC端的沉浸式WebApp体验和优化的OpenWrt LuCI主题
+- **luci-theme-vdesign**基于luci-theme-neobird二次开发, 适用于[lede](https://github.com/coolsnowwolf/lede)
 - 只支持lede源码的lua版本
 - JS分支开始由[papagaye744](https://github.com/papagaye744)维护
 
-- 你可以使用[插件](https://github.com/gngpp/luci-app-design-config)定义一些设置
+- 你可以使用[插件](https://github.com/gngpp/luci-app-vdesign-config)定义一些设置
   - 支持更改主题深色/浅色模式
   - 支持显示/隐藏导航栏
   - 支持更换常用的代理图标
@@ -74,8 +74,8 @@
 ### 编译
 
 ```
-git clone https://github.com/gngpp/luci-theme-design.git  package/luci-theme-design
-make menuconfig # choose LUCI->Theme->Luci-theme-design  
+git clone https://github.com/gngpp/luci-theme-vdesign.git  package/luci-theme-vdesign
+make menuconfig # choose LUCI->Theme->Luci-theme-vdesign  
 make V=s
 ```
 

@@ -7,11 +7,11 @@
 	luci-theme-neobird
 	Copyright 2021 2smile <thinktip@gmail.com>
 	
-	luci-theme-design
+	luci-theme-vdesign
 	Copyright 2023 2smile <gngppz@gmail.com>
 
 	Have a bug? Please create an issue here on GitHub!
-	https://github.com/gngpp/luci-theme-design
+	https://github.com/gngpp/luci-theme-vdesign
 
 	luci-theme-bootstrap:
 	Copyright 2008 Steven Barth <steven@midlink.org>
@@ -120,10 +120,10 @@
 	local mode = 'normal'
 	local navbar = 'display'
 	local navbar_proxy = 'shadowsocksr'
-	if fs.access('/etc/config/design') then
-		mode = uci:get_first('design', 'global', 'mode')
-		navbar = uci:get_first('design', 'global', 'navbar')
-		navbar_proxy = uci:get_first('design', 'global', 'navbar_proxy')
+	if fs.access('/etc/config/vdesign') then
+		mode = uci:get_first('vdesign', 'global', 'mode')
+		navbar = uci:get_first('vdesign', 'global', 'navbar')
+		navbar_proxy = uci:get_first('vdesign', 'global', 'navbar_proxy')
 	end 
 -%>
 <!DOCTYPE html>
@@ -162,7 +162,7 @@
         </style>
     <% end -%>
 	<script src="<%=media%>/js/jquery.min.js?v=<%= ver.luciversion %>"></script>
-	<script src="<%=media%>/js/design.js?v=<%= ver.luciversion %>"></script>
+	<script src="<%=media%>/js/vdesign.js?v=<%= ver.luciversion %>"></script>
 </head>
 
 <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>"

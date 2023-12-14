@@ -4,9 +4,9 @@
   </Card>
 </template>
 <script lang="ts" setup>
-  import { Ref, ref, watch } from 'vue'
-  import { Card } from 'ant-design-vue'
-  import { useECharts } from '/@/hooks/web/useECharts'
+  import { Ref, ref, watch } from 'vue';
+  import { Card } from 'ant-design-vue';
+  import { useECharts } from '/@/hooks/web/useECharts';
 
   const props = defineProps({
     loading: Boolean,
@@ -18,15 +18,15 @@
       type: String as PropType<string>,
       default: '400px',
     },
-  })
+  });
 
-  const chartRef = ref<HTMLDivElement | null>(null)
-  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
+  const chartRef = ref<HTMLDivElement | null>(null);
+  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
   watch(
     () => props.loading,
     () => {
       if (props.loading) {
-        return
+        return;
       }
       setOptions({
         legend: {
@@ -39,22 +39,28 @@
           splitNumber: 8,
           indicator: [
             {
-              name: '2017',
+              text: '2017',
+              max: 100,
             },
             {
-              name: '2017',
+              text: '2017',
+              max: 100,
             },
             {
-              name: '2018',
+              text: '2018',
+              max: 100,
             },
             {
-              name: '2019',
+              text: '2019',
+              max: 100,
             },
             {
-              name: '2020',
+              text: '2020',
+              max: 100,
             },
             {
-              name: '2021',
+              text: '2021',
+              max: 100,
             },
           ],
         },
@@ -87,8 +93,8 @@
             ],
           },
         ],
-      })
+      });
     },
     { immediate: true },
-  )
+  );
 </script>

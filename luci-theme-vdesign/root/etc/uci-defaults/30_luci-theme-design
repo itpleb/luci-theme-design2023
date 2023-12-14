@@ -2,8 +2,8 @@
 
 if [ "$PKG_UPGRADE" != 1 ]; then
 	uci batch <<-EOF
-		set luci.themes.Design=/luci-static/design
-		set luci.main.mediaurlbase=/luci-static/design
+		set luci.themes.vDesign=/luci-static/vdesign
+		set luci.main.mediaurlbase=/luci-static/vdesign
 		commit luci
 	EOF
 fi

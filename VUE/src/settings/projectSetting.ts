@@ -1,6 +1,6 @@
-import type { ProjectConfig } from '/#/config'
-import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '/@/enums/menuEnum'
-import { CacheTypeEnum } from '/@/enums/cacheEnum'
+import type { ProjectConfig } from '/#/config';
+import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '/@/enums/menuEnum';
+import { CacheTypeEnum } from '/@/enums/cacheEnum';
 import {
   ContentEnum,
   PermissionModeEnum,
@@ -8,9 +8,9 @@ import {
   RouterTransitionEnum,
   SettingButtonPositionEnum,
   SessionTimeoutProcessingEnum,
-} from '/@/enums/appEnum'
-import { SIDE_BAR_BG_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST } from './designSetting'
-import { primaryColor } from '../../build/config/themeConfig'
+} from '/@/enums/appEnum';
+import { SIDE_BAR_BG_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST } from './designSetting';
+import { primaryColor } from '../../build/config/themeConfig';
 
 // ! You need to clear the browser cache after the change
 const setting: ProjectConfig = {
@@ -63,6 +63,8 @@ const setting: ProjectConfig = {
     show: true,
     // theme
     theme: ThemeEnum.LIGHT,
+    // Whether to enable the lock screen function
+    useLockPage: true,
     // Whether to show the full screen button
     showFullScreen: true,
     // Whether to show the document button
@@ -81,8 +83,6 @@ const setting: ProjectConfig = {
     fixed: true,
     // Menu collapse
     collapsed: false,
-    // When sider hide because of the responsive layout
-    siderHidden: false,
     // Whether to display the menu name when folding the menu
     collapsedShowTitle: false,
     // Whether it can be dragged
@@ -134,7 +134,7 @@ const setting: ProjectConfig = {
   // Transition Setting
   transitionSetting: {
     //  Whether to open the page switching animation
-    // The disabled state will also disable pageLoading
+    // The disabled state will also disable pageLoadinng
     enable: true,
 
     // Route basic switching animation
@@ -150,6 +150,9 @@ const setting: ProjectConfig = {
 
   // Whether to enable KeepAlive cache is best to close during development, otherwise the cache needs to be cleared every time
   openKeepAlive: true,
+
+  // Automatic screen lock time, 0 does not lock the screen. Unit minute default 0
+  lockTime: 0,
 
   // Whether to show breadcrumbs
   showBreadCrumb: true,
@@ -172,6 +175,6 @@ const setting: ProjectConfig = {
   // Whether to cancel the http request that has been sent but not responded when switching the interface.
   // If it is enabled, I want to overwrite a single interface. Can be set in a separate interface
   removeAllHttpPending: false,
-}
+};
 
-export default setting
+export default setting;

@@ -12,6 +12,7 @@ export default {
     comp: '组件',
     basic: '基础组件',
     transition: '动画组件',
+    countTo: '数字动画',
 
     scroll: '滚动组件',
     scrollBasic: '基础滚动',
@@ -35,6 +36,7 @@ export default {
     verifyDrag: '拖拽校验',
     verifyRotate: '图片还原',
 
+    qrcode: '二维码组件',
     strength: '密码强度组件',
     upload: '上传组件',
 
@@ -42,6 +44,7 @@ export default {
 
     time: '相对时间',
     cropperImage: '图片裁剪',
+    cardList: '卡片列表',
   },
   editor: {
     editor: '编辑器',
@@ -65,8 +68,10 @@ export default {
     sessionTimeout: '登录过期',
     tabs: '标签页操作',
     tabDetail: '标签详情页',
+    print: '打印',
     contextMenu: '右键菜单',
     download: '文件下载',
+    clickOutSide: 'ClickOutSide组件',
     imgPreview: '图片预览',
     copy: '剪切板',
     msg: '消息提示',
@@ -80,9 +85,9 @@ export default {
     menu: 'Menu带参',
     menu1: 'Menu带参1',
     menu2: 'Menu带参2',
+    ws: 'websocket测试',
     breadcrumb: '面包屑导航',
     breadcrumbFlat: '平级模式',
-    requestDemo: '测试请求重试',
     breadcrumbFlatDetail: '平级详情',
     breadcrumbChildren: '层级模式',
     breadcrumbChildrenDetail: '层级详情',
@@ -101,7 +106,12 @@ export default {
     dynamicForm: '动态表单',
     customerForm: '自定义组件',
     appendForm: '表单增删示例',
-    tabsForm: '标签页+多级field',
+  },
+  iframe: {
+    frame: '外部页面',
+    antv: 'antVue文档(内嵌)',
+    doc: '项目文档(内嵌)',
+    docExternal: '项目文档(外链)',
   },
   level: { level: '多级菜单' },
   page: {
@@ -176,6 +186,5 @@ export default {
     editCellTable: '可编辑单元格',
     editRowTable: '可编辑行',
     authColumn: '权限列',
-    resizeParentHeightTable: '继承父元素高度',
   },
-}
+};

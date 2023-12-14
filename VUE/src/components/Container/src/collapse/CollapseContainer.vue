@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <CollapseHeader v-bind="props" :prefixCls="prefixCls" :show="show" @expand="handleExpand">
+    <CollapseHeader v-bind="$props" :prefixCls="prefixCls" :show="show" @expand="handleExpand">
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -23,17 +23,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import type { PropType } from 'vue'
-  import { ref } from 'vue'
-  import { isNil } from 'lodash-es'
+  import type { PropType } from 'vue';
+  import { ref } from 'vue';
   // component
-  import { Skeleton } from 'ant-design-vue'
-  import { CollapseTransition } from '/@/components/Transition'
-  import CollapseHeader from './CollapseHeader.vue'
-  import { triggerWindowResize } from '/@/utils/event'
+  import { Skeleton } from 'ant-design-vue';
+  import { CollapseTransition } from '/@/components/Transition';
+  import CollapseHeader from './CollapseHeader.vue';
+  import { triggerWindowResize } from '/@/utils/event';
   // hook
-  import { useTimeoutFn } from '/@/hooks/core/useTimeout'
-  import { useDesign } from '/@/hooks/web/useDesign'
+  import { useTimeoutFn } from '/@/hooks/core/useTimeout';
+  import { useDesign } from '/@/hooks/web/useDesign';
 
   const props = defineProps({
     title: { type: String, default: '' },
@@ -58,26 +57,22 @@
      * Delayed loading time
      */
     lazyTime: { type: Number, default: 0 },
-  })
+  });
 
-  const show = ref(true)
+  const show = ref(true);
 
-  const { prefixCls } = useDesign('collapse-container')
+  const { prefixCls } = useDesign('collapse-container');
 
   /**
    * @description: Handling development events
    */
-  function handleExpand(val: boolean) {
-    show.value = isNil(val) ? !show.value : val
+  function handleExpand() {
+    show.value = !show.value;
     if (props.triggerWindowResize) {
       // 200 milliseconds here is because the expansion has animation,
-      useTimeoutFn(triggerWindowResize, 200)
+      useTimeoutFn(triggerWindowResize, 200);
     }
   }
-
-  defineExpose({
-    handleExpand,
-  })
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-collapse-container';

@@ -1,19 +1,17 @@
 <template>
   <div ref="chartRef" :style="{ height, width }"></div>
 </template>
-<script lang="ts">
-  import { basicProps } from './props'
-</script>
 <script lang="ts" setup>
-  import { onMounted, ref, Ref } from 'vue'
-  import { useECharts } from '/@/hooks/web/useECharts'
+  import { onMounted, ref, Ref } from 'vue';
+  import { useECharts } from '/@/hooks/web/useECharts';
+  import { basicProps } from './props';
 
   defineProps({
     ...basicProps,
-  })
+  });
 
-  const chartRef = ref<HTMLDivElement | null>(null)
-  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
+  const chartRef = ref<HTMLDivElement | null>(null);
+  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
   onMounted(() => {
     setOptions({
       tooltip: {
@@ -28,7 +26,20 @@
       grid: { left: '1%', right: '1%', top: '2  %', bottom: 0, containLabel: true },
       xAxis: {
         type: 'category',
-        data: [...new Array(12)].map((_item, index) => `${index + 1}月`),
+        data: [
+          '1月',
+          '2月',
+          '3月',
+          '4月',
+          '5月',
+          '6月',
+          '7月',
+          '8月',
+          '9月',
+          '10月',
+          '11月',
+          '12月',
+        ],
       },
       yAxis: {
         type: 'value',
@@ -42,6 +53,6 @@
           barMaxWidth: 80,
         },
       ],
-    })
-  })
+    });
+  });
 </script>

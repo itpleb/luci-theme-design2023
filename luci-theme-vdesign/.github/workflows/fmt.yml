@@ -21,9 +21,9 @@ jobs:
     - name: fmt
       run: |
         sudo apt update && sudo apt install minify
-        echo "$(minify dev/style.css)" > htdocs/luci-static/design/css/style.css
-        echo "$(minify dev/script.js)" > htdocs/luci-static/design/js/script.js
-        echo "$(minify dev/design.js)" > htdocs/luci-static/design/js/design.js
+        echo "$(minify dev/style.css)" > htdocs/luci-static/vdesign/css/style.css
+        echo "$(minify dev/script.js)" > htdocs/luci-static/vdesign/js/script.js
+        echo "$(minify dev/vdesign.js)" > htdocs/luci-static/vdesign/js/vdesign.js
 
     # - uses: stefanzweifel/git-auto-commit-action@v4
     #   with:
@@ -38,8 +38,8 @@ jobs:
         branch: fmt
         delete-branch: true
         add-paths: |
-          htdocs/luci-static/design/css/style.css
-          htdocs/luci-static/design/js/script.js
-          htdocs/luci-static/design/js/design.js
+          htdocs/luci-static/vdesign/css/style.css
+          htdocs/luci-static/vdesign/js/script.js
+          htdocs/luci-static/vdesign/js/vdesign.js
         title: ${{ github.event.head_commit.message }}
         commit-message: ${{ github.event.head_commit.message }}

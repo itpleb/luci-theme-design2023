@@ -43,28 +43,28 @@ jobs:
           #echo "src-git routing https://github.com/coolsnowwolf/routing" >> feeds.conf.default
           #echo "src-git telephony https://git.openwrt.org/feed/telephony.git" >> feeds.conf.default
 
-          git clone  --depth=1 -b "${{ github.ref_name }}" https://github.com/gngpp/luci-theme-design.git package/luci-theme-design
-          git clone https://github.com/gngpp/luci-app-design-config.git package/luci-app-design-config
+          git clone  --depth=1 -b "${{ github.ref_name }}" https://github.com/gngpp/luci-theme-vdesign.git package/luci-theme-vdesign
+          git clone https://github.com/gngpp/luci-app-vdesign-config.git package/luci-app-vdesign-config
           sudo apt update && sudo apt install minify
 
-          pushd package/luci-theme-design
-          echo "$(minify dev/style.css)" > htdocs/luci-static/design/css/style.css
-          echo "$(minify dev/script.js)" > htdocs/luci-static/design/js/script.js
-          echo "$(minify dev/design.js)" > htdocs/luci-static/design/js/design.js
+          pushd package/luci-theme-vdesign
+          echo "$(minify dev/style.css)" > htdocs/luci-static/vdesign/css/style.css
+          echo "$(minify dev/script.js)" > htdocs/luci-static/vdesign/js/script.js
+          echo "$(minify dev/vdesign.js)" > htdocs/luci-static/vdesign/js/vdesign.js
           popd
 
           ./scripts/feeds update -a && ./scripts/feeds install -a
-          echo "CONFIG_PACKAGE_luci-theme-design=y" >> .config
-          echo "CONFIG_PACKAGE_luci-app-design-config=y" >> .config
+          echo "CONFIG_PACKAGE_luci-theme-vdesign=y" >> .config
+          echo "CONFIG_PACKAGE_luci-app-vdesign-config=y" >> .config
 
           make defconfig
-          make package/luci-theme-design/compile -j$(nproc)
-          make package/luci-app-design-config/compile -j$(nproc)
+          make package/luci-theme-vdesign/compile -j$(nproc)
+          make package/luci-app-vdesign-config/compile -j$(nproc)
 
           cd ..
-          TARGET="$(find openwrt-sdk/bin/ | grep  luci-theme-design)"
-          CONFIG_TARGET="$(find openwrt-sdk/bin/ | grep luci-app-design-config)"
-          CONFIG_I18N_TARGET="$(find openwrt-sdk/bin/ | grep luci-i18n-design-config)"
+          TARGET="$(find openwrt-sdk/bin/ | grep  luci-theme-vdesign)"
+          CONFIG_TARGET="$(find openwrt-sdk/bin/ | grep luci-app-vdesign-config)"
+          CONFIG_I18N_TARGET="$(find openwrt-sdk/bin/ | grep luci-i18n-vdesign-config)"
 
           echo 'JSON_RESPONSE<<EOF' >> $GITHUB_OUTPUT
           echo "$TARGET" >> $GITHUB_OUTPUT

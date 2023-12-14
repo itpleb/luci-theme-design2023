@@ -4,9 +4,9 @@
   </Card>
 </template>
 <script lang="ts" setup>
-  import { Ref, ref, watch } from 'vue'
-  import { Card } from 'ant-design-vue'
-  import { useECharts } from '/@/hooks/web/useECharts'
+  import { Ref, ref, watch } from 'vue';
+  import { Card } from 'ant-design-vue';
+  import { useECharts } from '/@/hooks/web/useECharts';
 
   const props = defineProps({
     loading: Boolean,
@@ -18,15 +18,15 @@
       type: String as PropType<string>,
       default: '300px',
     },
-  })
-  const chartRef = ref<HTMLDivElement | null>(null)
-  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
+  });
 
+  const chartRef = ref<HTMLDivElement | null>(null);
+  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
   watch(
     () => props.loading,
     () => {
       if (props.loading) {
-        return
+        return;
       }
       setOptions({
         legend: {
@@ -39,22 +39,28 @@
           splitNumber: 8,
           indicator: [
             {
-              name: '电脑',
+              text: '电脑',
+              max: 100,
             },
             {
-              name: '充电器',
+              text: '充电器',
+              max: 100,
             },
             {
-              name: '耳机',
+              text: '耳机',
+              max: 100,
             },
             {
-              name: '手机',
+              text: '手机',
+              max: 100,
             },
             {
-              name: 'Ipad',
+              text: 'Ipad',
+              max: 100,
             },
             {
-              name: '耳机',
+              text: '耳机',
+              max: 100,
             },
           ],
         },
@@ -87,8 +93,8 @@
             ],
           },
         ],
-      })
+      });
     },
     { immediate: true },
-  )
+  );
 </script>

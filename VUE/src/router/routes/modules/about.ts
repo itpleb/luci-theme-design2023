@@ -1,9 +1,9 @@
-import type { AppRouteModule } from '/@/router/types'
+import type { AppRouteModule } from '/@/router/types';
 
-import { LAYOUT } from '/@/router/constant'
-import { t } from '/@/hooks/web/useI18n'
+import { LAYOUT } from '/@/router/constant';
+import { t } from '/@/hooks/web/useI18n';
 
-const about: AppRouteModule = {
+const dashboard: AppRouteModule = {
   path: '/about',
   name: 'About',
   component: LAYOUT,
@@ -26,6 +26,6 @@ const about: AppRouteModule = {
       },
     },
   ],
-}
+};
 
-export default about
+export default dashboard;

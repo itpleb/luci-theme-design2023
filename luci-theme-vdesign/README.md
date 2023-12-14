@@ -3,26 +3,26 @@
     LuCI design theme for OpenWrt
   </h1>
 <a href="/LICENSE">
-    <img src="https://img.shields.io/github/license/gngpp/luci-theme-vdesign?style=flat&a=1" alt="">
+    <img src="https://img.shields.io/github/license/gngpp/luci-theme-design?style=flat&a=1" alt="">
   </a>
-  <a href="https://github.com/gngpp/luci-theme-vdesign/pulls">
+  <a href="https://github.com/gngpp/luci-theme-design/pulls">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="">
-  </a><a href="https://github.com/gngpp/luci-theme-vdesign/issues/new">
+  </a><a href="https://github.com/gngpp/luci-theme-design/issues/new">
     <img src="https://img.shields.io/badge/Issues-welcome-brightgreen.svg?style=flat">
-  </a><a href="https://github.com/gngpp/luci-theme-vdesign/releases">
-    <img src="https://img.shields.io/github/release/gngpp/luci-theme-vdesign.svg?style=flat">
-  </a><a href="hhttps://github.com/gngpp/luci-theme-vdesign/releases">
-    <img src="https://img.shields.io/github/downloads/gngpp/luci-theme-vdesign/total?style=flat&?">
+  </a><a href="https://github.com/gngpp/luci-theme-design/releases">
+    <img src="https://img.shields.io/github/release/gngpp/luci-theme-design.svg?style=flat">
+  </a><a href="hhttps://github.com/gngpp/luci-theme-design/releases">
+    <img src="https://img.shields.io/github/downloads/gngpp/luci-theme-design/total?style=flat&?">
   </a>
 </div>
 <br>
 
 <br>简体中文 | [English](README_en.md)
 
-# luci-theme-vdesign
+# luci-theme-design
 
- luci-theme-vdesign 是一个针对移动端和PC端的沉浸式WebApp体验和优化的OpenWrt LuCI主题
-- **luci-theme-vdesign**基于luci-theme-neobird二次开发, 适用于[lede](https://github.com/coolsnowwolf/lede)
+ luci-theme-design 是一个针对移动端和PC端的沉浸式WebApp体验和优化的OpenWrt LuCI主题
+- **luci-theme-design**基于luci-theme-neobird二次开发, 适用于[lede](https://github.com/coolsnowwolf/lede)
 - 只支持lede源码的lua版本
 - JS分支开始由[papagaye744](https://github.com/papagaye744)维护
 
@@ -74,7 +74,7 @@
 ### 编译
 
 ```
-git clone https://github.com/gngpp/luci-theme-vdesign.git  package/luci-theme-vdesign
+git clone https://github.com/gngpp/luci-theme-design.git  package/luci-theme-design
 make menuconfig # choose LUCI->Theme->Luci-theme-design  
 make V=s
 ```

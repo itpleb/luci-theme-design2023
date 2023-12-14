@@ -1,33 +1,33 @@
-node_modules
+VUE/node_modules
 .DS_Store
-dist
-.npmrc
-.cache
+VUE/dist
+VUE/.npmrc
+VUE/.cache
 
-tests/server/static
-tests/server/static/upload
+VUE/tests/server/static
+VUE/ests/server/static/upload
 
 .local
 # local env files
-.env.local
-.env.*.local
-.eslintcache
+VUE/.env.local
+VUE/.env.*.local
+VUE/.eslintcache
 
 # Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+VUE/npm-debug.log*
+VUE/yarn-debug.log*
+VUE/yarn-error.log*
+VUE/pnpm-debug.log*
 
 # Editor directories and files
-.idea
+VUE/.idea
 # .vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+VUE/*.suo
+VUE/*.ntvs*
+VUE/*.njsproj
+VUE/*.sln
+VUE/*.sw?
 
-package-lock.json
-pnpm-lock.yaml
+VUE/package-lock.json
+VUE/pnpm-lock.yaml
 

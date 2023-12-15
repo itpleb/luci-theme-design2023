@@ -37,9 +37,9 @@
       <ACol :span="12">
         <FormItem :style="{ 'text-align': 'right' }">
           <!-- No logic, you need to deal with it yourself -->
-          <Button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)">
+          <!-- <Button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)">
             {{ t('sys.login.forgetPassword') }}
-          </Button>
+          </Button> -->
         </FormItem>
       </ACol>
     </ARow>
@@ -52,7 +52,7 @@
         {{ t('sys.login.registerButton') }}
       </Button> -->
     </FormItem>
-    <ARow class="enter-x">
+    <!-- <ARow class="enter-x">
       <ACol :md="8" :xs="24">
         <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
           {{ t('sys.login.mobileSignInFormTitle') }}
@@ -78,7 +78,7 @@
       <AlipayCircleFilled />
       <GoogleCircleFilled />
       <TwitterCircleFilled />
-    </div>
+    </div> -->
   </Form>
 </template>
 <script lang="ts" setup>
@@ -119,8 +119,8 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'vben',
-    password: '123456',
+    account: 'root',
+    password: '',
   });
 
   const { validForm } = useFormValid(formRef);

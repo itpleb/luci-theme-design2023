@@ -24,7 +24,7 @@ export function createProxy(list: ProxyList = []) {
     ret[prefix] = {
       target: target,
       changeOrigin: true,
-      ws: true,
+      // ws: true,
       rewrite: (path) => path.replace(new RegExp(`^${prefix}`), ''),
       // https is require secure=false
       ...(isHttps ? { secure: false } : {}),

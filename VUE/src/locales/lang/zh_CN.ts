@@ -1,13 +1,18 @@
 import { genMessage } from '../helper';
 import antdLocale from 'ant-design-vue/es/locale/zh_CN';
-import momentLocale from 'moment/dist/locale/zh-cn';
+import { deepMerge } from '@/utils';
 
-const modules = import.meta.globEager('./zh-CN/**/*.ts');
+const modules = import.meta.glob('./zh-CN/**/*.json', { eager: true });
+
 export default {
   message: {
-    ...genMessage(modules, 'zh-CN'),
-    antdLocale,
+    ...genMessage(modules as Recordable<Recordable>, 'zh-CN'),
+    antdLocale: {
+      ...antdLocale,
+      DatePicker: deepMerge(
+        antdLocale.DatePicker,
+        genMessage(modules as Recordable<Recordable>, 'zh-CN').antdLocale.DatePicker,
+      ),
+    },
   },
-  momentLocale,
-  momentLocaleName: 'zh-cn',
 };

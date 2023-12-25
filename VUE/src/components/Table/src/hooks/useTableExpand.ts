@@ -8,7 +8,7 @@ export function useTableExpand(
   tableData: Ref<Recordable[]>,
   emit: EmitType,
 ) {
-  const expandedRowKeys = ref<string[]>([]);
+  const expandedRowKeys = ref<(string | number)[]>([]);
 
   const getAutoCreateKey = computed(() => {
     return unref(propsRef).autoCreateKey && !unref(propsRef).rowKey;
@@ -37,6 +37,24 @@ export function useTableExpand(
     expandedRowKeys.value = keys;
   }
 
+  function collapseAll() {
+    expandedRowKeys.value = [];
+  }
+
+  function expandRows(keys: (string | number)[]) {
+    // use row ID expands the specified table row
+    const { isTreeTable } = unref(propsRef);
+    if (!isTreeTable) return;
+    expandedRowKeys.value = [...expandedRowKeys.value, ...keys];
+  }
+
+  function collapseRows(keys: (string | number)[]) {
+    // use row ID collapses the specified table row
+    const { isTreeTable } = unref(propsRef);
+    if (!isTreeTable) return;
+    expandedRowKeys.value = unref(expandedRowKeys).filter((key) => !keys.includes(key));
+  }
+
   function getAllKeys(data?: Recordable[]) {
     const keys: string[] = [];
     const { childrenColumnName } = unref(propsRef);
@@ -50,9 +68,5 @@ export function useTableExpand(
     return keys;
   }
 
-  function collapseAll() {
-    expandedRowKeys.value = [];
-  }
-
-  return { getExpandOption, expandAll, collapseAll };
+  return { getExpandOption, expandAll, collapseAll, expandRows, collapseRows };
 }

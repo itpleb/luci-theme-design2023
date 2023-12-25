@@ -1,5 +1,5 @@
 <template>
-  <template v-if="getShow">
+  <div v-if="getShow">
     <LoginFormTitle class="enter-x" />
     <div class="enter-x min-w-64 min-h-64">
       <QrCode
@@ -12,17 +12,17 @@
         {{ t('sys.login.backSignIn') }}
       </Button>
     </div>
-  </template>
+  </div>
 </template>
 <script lang="ts" setup>
   import { computed, unref } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { Button, Divider } from 'ant-design-vue';
-  import { QrCode } from '/@/components/Qrcode/index';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { QrCode } from '@/components/Qrcode';
+  import { useI18n } from '@/hooks/web/useI18n';
   import { useLoginState, LoginStateEnum } from './useLogin';
 
-  const qrCodeUrl = 'https://vvbin.cn/next/login';
+  const qrCodeUrl = 'https://vben.vvbin.cn/login';
 
   const { t } = useI18n();
   const { handleBackLogin, getLoginState } = useLoginState();

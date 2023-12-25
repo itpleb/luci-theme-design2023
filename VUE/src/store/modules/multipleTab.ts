@@ -2,18 +2,18 @@ import type { RouteLocationNormalized, RouteLocationRaw, Router } from 'vue-rout
 
 import { toRaw, unref } from 'vue';
 import { defineStore } from 'pinia';
-import { store } from '/@/store';
+import { store } from '@/store';
 
-import { useGo, useRedo } from '/@/hooks/web/usePage';
-import { Persistent } from '/@/utils/cache/persistent';
+import { useGo, useRedo } from '@/hooks/web/usePage';
+import { Persistent } from '@/utils/cache/persistent';
 
-import { PageEnum } from '/@/enums/pageEnum';
-import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '/@/router/routes/basic';
-import { getRawRoute } from '/@/utils';
-import { MULTIPLE_TABS_KEY } from '/@/enums/cacheEnum';
+import { PageEnum } from '@/enums/pageEnum';
+import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '@/router/routes/basic';
+import { getRawRoute } from '@/utils';
+import { MULTIPLE_TABS_KEY } from '@/enums/cacheEnum';
 
-import projectSetting from '/@/settings/projectSetting';
-import { useUserStore } from '/@/store/modules/user';
+import projectSetting from '@/settings/projectSetting';
+import { useUserStore } from '@/store/modules/user';
 
 export interface MultipleTabState {
   cacheTabList: Set<string>;
@@ -23,7 +23,7 @@ export interface MultipleTabState {
 
 function handleGotoPage(router: Router) {
   const go = useGo(router);
-  go(unref(router.currentRoute).path, true);
+  go(unref(router.currentRoute).fullPath, true);
 }
 
 const getToTarget = (tabItem: RouteLocationNormalized) => {
@@ -48,14 +48,14 @@ export const useMultipleTabStore = defineStore({
     lastDragEndIndex: 0,
   }),
   getters: {
-    getTabList(): RouteLocationNormalized[] {
-      return this.tabList;
+    getTabList(state): RouteLocationNormalized[] {
+      return state.tabList;
     },
-    getCachedTabList(): string[] {
-      return Array.from(this.cacheTabList);
+    getCachedTabList(state): string[] {
+      return Array.from(state.cacheTabList);
     },
-    getLastDragEndIndex(): number {
-      return this.lastDragEndIndex;
+    getLastDragEndIndex(state): number {
+      return state.lastDragEndIndex;
     },
   },
   actions: {
@@ -187,6 +187,7 @@ export const useMultipleTabStore = defineStore({
       if (path !== tab.path) {
         // Closed is not the activation tab
         close(tab);
+        this.updateCacheTab();
         return;
       }
 
@@ -307,7 +308,7 @@ export const useMultipleTabStore = defineStore({
 
       for (const path of closePathList) {
         if (path !== route.fullPath) {
-          const closeItem = this.tabList.find((item) => item.path === path);
+          const closeItem = this.tabList.find((item) => item.fullPath === path);
           if (!closeItem) {
             continue;
           }
@@ -319,6 +320,7 @@ export const useMultipleTabStore = defineStore({
       }
       this.bulkCloseTabs(pathList);
       this.updateCacheTab();
+      Persistent.setLocal(MULTIPLE_TABS_KEY, this.tabList, true);
       handleGotoPage(router);
     },
 

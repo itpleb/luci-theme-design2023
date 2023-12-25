@@ -1,20 +1,20 @@
-import type { UserInfo } from '/#/store';
-import type { ErrorMessageMode } from '/#/axios';
+import type { UserInfo } from '#/store';
+import type { ErrorMessageMode } from '#/axios';
 import { defineStore } from 'pinia';
-import { store } from '/@/store';
-import { RoleEnum } from '/@/enums/roleEnum';
-import { PageEnum } from '/@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
-import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
-import { useI18n } from '/@/hooks/web/useI18n';
-import { useMessage } from '/@/hooks/web/useMessage';
-import { router } from '/@/router';
-import { usePermissionStore } from '/@/store/modules/permission';
+import { store } from '@/store';
+import { RoleEnum } from '@/enums/roleEnum';
+import { PageEnum } from '@/enums/pageEnum';
+import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
+import { getAuthCache, setAuthCache } from '@/utils/auth';
+import { GetUserInfoModel, LoginParams } from '@/api/sys/model/userModel';
+import { doLogout, getUserInfo, loginApi } from '@/api/sys/user';
+import { useI18n } from '@/hooks/web/useI18n';
+import { useMessage } from '@/hooks/web/useMessage';
+import { router } from '@/router';
+import { usePermissionStore } from '@/store/modules/permission';
 import { RouteRecordRaw } from 'vue-router';
-import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
-import { isArray } from '/@/utils/is';
+import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic';
+import { isArray } from '@/utils/is';
 import { h } from 'vue';
 
 interface UserState {
@@ -40,20 +40,20 @@ export const useUserStore = defineStore({
     lastUpdateTime: 0,
   }),
   getters: {
-    getUserInfo(): UserInfo {
-      return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
+    getUserInfo(state): UserInfo {
+      return state.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
-    getToken(): string {
-      return this.token || getAuthCache<string>(TOKEN_KEY);
+    getToken(state): string {
+      return state.token || getAuthCache<string>(TOKEN_KEY);
     },
-    getRoleList(): RoleEnum[] {
-      return this.roleList.length > 0 ? this.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
+    getRoleList(state): RoleEnum[] {
+      return state.roleList.length > 0 ? state.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
     },
-    getSessionTimeout(): boolean {
-      return !!this.sessionTimeout;
+    getSessionTimeout(state): boolean {
+      return !!state.sessionTimeout;
     },
-    getLastUpdateTime(): number {
-      return this.lastUpdateTime;
+    getLastUpdateTime(state): number {
+      return state.lastUpdateTime;
     },
   },
   actions: {
@@ -100,10 +100,18 @@ export const useUserStore = defineStore({
         return Promise.reject(error);
       }
     },
-    async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
+    async afterLoginAction(goHome?: boolean, userData?: any): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
       // get user info
-      const userInfo = await this.getUserInfoAction();
+      const userInfo = {
+        userId: userData?.id,
+        username: 'root',
+        realName: 'root',
+        // avatar: string,
+        // desc?: string,
+        // homePath?: string,
+        // roles: RoleInfo[];
+      }; // await this.getUserInfoAction();
 
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {

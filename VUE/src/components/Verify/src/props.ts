@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useI18n } from '@/hooks/web/useI18n';
 
 const { t } = useI18n();
 export const basicProps = {
@@ -38,19 +38,19 @@ export const basicProps = {
 
   wrapStyle: {
     type: Object as PropType<any>,
-    default: {},
+    default: () => ({}),
   },
   contentStyle: {
     type: Object as PropType<any>,
-    default: {},
+    default: () => ({}),
   },
   barStyle: {
     type: Object as PropType<any>,
-    default: {},
+    default: () => ({}),
   },
   actionStyle: {
     type: Object as PropType<any>,
-    default: {},
+    default: () => ({}),
   },
 };
 
@@ -67,7 +67,7 @@ export const rotateProps = {
 
   imgWrapStyle: {
     type: Object as PropType<any>,
-    default: {},
+    default: () => ({}),
   },
 
   minDegree: {

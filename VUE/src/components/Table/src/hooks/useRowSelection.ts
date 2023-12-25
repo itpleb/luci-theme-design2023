@@ -1,16 +1,17 @@
-import { isFunction } from '/@/utils/is';
+import { isFunction } from '@/utils/is';
 import type { BasicTableProps, TableRowSelection } from '../types/table';
 import { computed, ComputedRef, nextTick, Ref, ref, toRaw, unref, watch } from 'vue';
 import { ROW_KEY } from '../const';
 import { omit } from 'lodash-es';
-import { findNodeAll } from '/@/utils/helper/treeHelper';
+import { findNodeAll } from '@/utils/helper/treeHelper';
+import type { Key } from 'ant-design-vue/lib/table/interface';
 
 export function useRowSelection(
   propsRef: ComputedRef<BasicTableProps>,
   tableData: Ref<Recordable[]>,
   emit: EmitType,
 ) {
-  const selectedRowKeysRef = ref<string[]>([]);
+  const selectedRowKeysRef = ref<Key[]>([]);
   const selectedRowRef = ref<Recordable[]>([]);
 
   const getRowSelectionRef = computed((): TableRowSelection | null => {
@@ -21,11 +22,10 @@ export function useRowSelection(
 
     return {
       selectedRowKeys: unref(selectedRowKeysRef),
-      hideDefaultSelections: false,
-      onChange: (selectedRowKeys: string[]) => {
+      onChange: (selectedRowKeys: Key[], selectedRows: any[]) => {
         setSelectedRowKeys(selectedRowKeys);
-        // selectedRowKeysRef.value = selectedRowKeys;
-        // selectedRowRef.value = selectedRows;
+        // 维持外部定义的onChange回调
+        rowSelection.onChange?.(selectedRowKeys, selectedRows);
       },
       ...omit(rowSelection, ['onChange']),
     };
@@ -33,7 +33,7 @@ export function useRowSelection(
 
   watch(
     () => unref(propsRef).rowSelection?.selectedRowKeys,
-    (v: string[]) => {
+    (v?: Key[]) => {
       setSelectedRowKeys(v);
     },
   );
@@ -65,17 +65,17 @@ export function useRowSelection(
     return unref(getAutoCreateKey) ? ROW_KEY : rowKey;
   });
 
-  function setSelectedRowKeys(rowKeys: string[]) {
-    selectedRowKeysRef.value = rowKeys;
+  function setSelectedRowKeys(rowKeys?: Key[]) {
+    selectedRowKeysRef.value = rowKeys || [];
     const allSelectedRows = findNodeAll(
       toRaw(unref(tableData)).concat(toRaw(unref(selectedRowRef))),
-      (item) => rowKeys.includes(item[unref(getRowKey) as string]),
+      (item) => rowKeys?.includes(item[unref(getRowKey) as string]),
       {
         children: propsRef.value.childrenColumnName ?? 'children',
       },
     );
     const trueSelectedRows: any[] = [];
-    rowKeys.forEach((key: string) => {
+    rowKeys?.forEach((key: Key) => {
       const found = allSelectedRows.find((item) => item[unref(getRowKey) as string] === key);
       found && trueSelectedRows.push(found);
     });

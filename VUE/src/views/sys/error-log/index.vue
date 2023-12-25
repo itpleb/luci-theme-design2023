@@ -1,7 +1,7 @@
 <template>
   <div class="p-4">
     <template v-for="src in imgList" :key="src">
-      <img :src="src" v-show="false" />
+      <img :src="src" v-show="false" alt="" />
     </template>
     <DetailModal :info="rowInfo" @register="registerModal" />
     <BasicTable @register="register" class="error-handle-table">
@@ -16,27 +16,32 @@
           {{ t('sys.errorLog.fireAjaxError') }}
         </a-button>
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            { label: t('sys.errorLog.tableActionDesc'), onClick: handleDetail.bind(null, record) },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                label: t('sys.errorLog.tableActionDesc'),
+                onClick: handleDetail.bind(null, record as ErrorLogInfo),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import type { ErrorLogInfo } from '/#/store';
+  import type { ErrorLogInfo } from '#/store';
   import { watch, ref, nextTick } from 'vue';
   import DetailModal from './DetailModal.vue';
-  import { BasicTable, useTable, TableAction } from '/@/components/Table/index';
-  import { useModal } from '/@/components/Modal';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useErrorLogStore } from '/@/store/modules/errorLog';
-  import { fireErrorApi } from '/@/api/demo/error';
+  import { BasicTable, useTable, TableAction } from '@/components/Table';
+  import { useModal } from '@/components/Modal';
+  import { useMessage } from '@/hooks/web/useMessage';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useErrorLogStore } from '@/store/modules/errorLog';
+  import { fireErrorApi } from '@/api/demo/error';
   import { getColumns } from './data';
   import { cloneDeep } from 'lodash-es';
 
@@ -52,7 +57,7 @@
       width: 80,
       title: 'Action',
       dataIndex: 'action',
-      slots: { customRender: 'action' },
+      // slots: { customRender: 'action' },
     },
   });
   const [registerModal, { openModal }] = useModal();

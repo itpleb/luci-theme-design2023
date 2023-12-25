@@ -1,21 +1,22 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
 import type { ComputedRef } from 'vue';
-import { computed, Ref, ref, toRaw, unref, watch } from 'vue';
+import { computed, Ref, ref, reactive, toRaw, unref, watch } from 'vue';
 import { renderEditCell } from '../components/editable';
-import { usePermission } from '/@/hooks/web/usePermission';
-import { useI18n } from '/@/hooks/web/useI18n';
-import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
+import { usePermission } from '@/hooks/web/usePermission';
+import { useI18n } from '@/hooks/web/useI18n';
+import { isArray, isBoolean, isFunction, isMap, isString } from '@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
-import { formatToDate } from '/@/utils/dateUtil';
+import { formatToDate } from '@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
+import { ColumnType } from 'ant-design-vue/es/table';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
   item.align = item.align || DEFAULT_ALIGN;
   if (ellipsis) {
     if (!key) {
-      item.key = dataIndex;
+      item.key = typeof dataIndex == 'object' ? dataIndex.join('-') : dataIndex;
     }
     if (!isBoolean(item.ellipsis)) {
       Object.assign(item, {
@@ -65,7 +66,7 @@ function handleIndexColumn(
 
   columns.unshift({
     flag: INDEX_COLUMN_FLAG,
-    width: 50,
+    width: 60,
     title: t('component.table.index'),
     align: 'center',
     customRender: ({ index }) => {
@@ -146,31 +147,36 @@ export function useColumns(
   const getViewColumns = computed(() => {
     const viewColumns = sortFixedColumn(unref(getColumnsRef));
 
+    const mapFn = (column) => {
+      const { slots, customRender, format, edit, editRow, flag } = column;
+
+      if (!slots || !slots?.title) {
+        column.customTitle = column.title;
+      }
+      const isDefaultAction = [INDEX_COLUMN_FLAG, ACTION_COLUMN_FLAG].includes(flag!);
+      if (!customRender && format && !edit && !isDefaultAction) {
+        column.customRender = ({ text, record, index }) => {
+          return formatCell(text, format, record, index);
+        };
+      }
+
+      // edit table
+      if ((edit || editRow) && !isDefaultAction) {
+        column.customRender = renderEditCell(column);
+      }
+      return reactive(column);
+    };
+
     const columns = cloneDeep(viewColumns);
     return columns
-      .filter((column) => {
-        return hasPermission(column.auth) && isIfShow(column);
-      })
+      .filter((column) => hasPermission(column.auth) && isIfShow(column))
       .map((column) => {
-        const { slots, dataIndex, customRender, format, edit, editRow, flag } = column;
-
-        if (!slots || !slots?.title) {
-          column.slots = { title: `header-${dataIndex}`, ...(slots || {}) };
-          column.customTitle = column.title;
-          Reflect.deleteProperty(column, 'title');
-        }
-        const isDefaultAction = [INDEX_COLUMN_FLAG, ACTION_COLUMN_FLAG].includes(flag!);
-        if (!customRender && format && !edit && !isDefaultAction) {
-          column.customRender = ({ text, record, index }) => {
-            return formatCell(text, format, record, index);
-          };
+        // Support table multiple header editable
+        if (column.children?.length) {
+          column.children = column.children.map(mapFn);
         }
 
-        // edit table
-        if ((edit || editRow) && !isDefaultAction) {
-          column.customRender = renderEditCell(column);
-        }
-        return column;
+        return mapFn(column);
       });
   });
 
@@ -197,7 +203,7 @@ export function useColumns(
    * set columns
    * @param columnList key｜column
    */
-  function setColumns(columnList: Partial<BasicColumn>[] | string[]) {
+  function setColumns(columnList: Partial<BasicColumn>[] | (string | string[])[]) {
     const columns = cloneDeep(columnList);
     if (!isArray(columns)) return;
 
@@ -210,31 +216,23 @@ export function useColumns(
 
     const cacheKeys = cacheColumns.map((item) => item.dataIndex);
 
-    if (!isString(firstColumn)) {
+    if (!isString(firstColumn) && !isArray(firstColumn)) {
       columnsRef.value = columns as BasicColumn[];
     } else {
-      const columnKeys = columns as string[];
+      const columnKeys = (columns as (string | string[])[]).map((m) => m.toString());
       const newColumns: BasicColumn[] = [];
       cacheColumns.forEach((item) => {
-        if (columnKeys.includes(item.dataIndex! || (item.key as string))) {
-          newColumns.push({
-            ...item,
-            defaultHidden: false,
-          });
-        } else {
-          newColumns.push({
-            ...item,
-            defaultHidden: true,
-          });
-        }
+        newColumns.push({
+          ...item,
+          defaultHidden: !columnKeys.includes(item.dataIndex?.toString() || (item.key as string)),
+        });
       });
-
       // Sort according to another array
       if (!isEqual(cacheKeys, columns)) {
         newColumns.sort((prev, next) => {
           return (
-            cacheKeys.indexOf(prev.dataIndex as string) -
-            cacheKeys.indexOf(next.dataIndex as string)
+            columnKeys.indexOf(prev.dataIndex?.toString() as string) -
+            columnKeys.indexOf(next.dataIndex?.toString() as string)
           );
         });
       }
@@ -261,14 +259,26 @@ export function useColumns(
   function getCacheColumns() {
     return cacheColumns;
   }
+  function setCacheColumns(columns: BasicColumn[]) {
+    if (!isArray(columns)) return;
+    cacheColumns = columns.filter((item) => !item.flag);
+  }
+  /**
+   * 拖拽列宽修改列的宽度
+   */
+  function setColumnWidth(w: number, col: ColumnType<BasicColumn>) {
+    col.width = w;
+  }
 
   return {
     getColumnsRef,
     getCacheColumns,
     getColumns,
     setColumns,
+    setColumnWidth,
     getViewColumns,
     setCacheColumnsByField,
+    setCacheColumns,
   };
 }
 
@@ -306,7 +316,7 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
   try {
     // date type
     const DATE_FORMAT_PREFIX = 'date|';
-    if (isString(format) && format.startsWith(DATE_FORMAT_PREFIX)) {
+    if (isString(format) && format.startsWith(DATE_FORMAT_PREFIX) && text) {
       const dateFormat = format.replace(DATE_FORMAT_PREFIX, '');
 
       if (!dateFormat) {

@@ -12,13 +12,14 @@
 </template>
 <script lang="ts" setup>
   import type { CSSProperties } from 'vue';
-  import { ref, unref, computed } from 'vue';
+  import { ref, unref, computed, onMounted, onUnmounted } from 'vue';
   import { Spin } from 'ant-design-vue';
-  import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
-  import { propTypes } from '/@/utils/propTypes';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useLayoutHeight } from '/@/layouts/default/content/useContentViewHeight';
+  import { useWindowSizeFn } from '@vben/hooks';
+  import { propTypes } from '@/utils/propTypes';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { useLayoutHeight } from '@/layouts/default/content/useContentViewHeight';
 
+  const emit = defineEmits(['message']);
   defineProps({
     frameSrc: propTypes.string.def(''),
   });
@@ -30,7 +31,7 @@
   const { headerHeightRef } = useLayoutHeight();
 
   const { prefixCls } = useDesign('iframe-page');
-  useWindowSizeFn(calcHeight, 150, { immediate: true });
+  useWindowSizeFn(calcHeight, { wait: 150, immediate: true });
 
   const getWrapStyle = computed((): CSSProperties => {
     return {
@@ -54,6 +55,34 @@
     loading.value = false;
     calcHeight();
   }
+
+  const messageHandler = (e: MessageEvent) => {
+    emit('message', e.data);
+  };
+
+  const postMessage = (message: any, tragetOrigin: string, transfer?: Transferable[]) => {
+    const iframe = unref(frameRef);
+    if (!iframe) return;
+    iframe.contentWindow?.postMessage(message, tragetOrigin, transfer);
+  };
+
+  const reload = () => {
+    loading.value = true;
+    const iframe = frameRef.value;
+    if (!iframe) return;
+    iframe.contentWindow?.location.reload();
+    loading.value = false;
+  };
+
+  onMounted(() => {
+    window.addEventListener('message', messageHandler);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener('message', messageHandler);
+  });
+
+  defineExpose({ postMessage, reload });
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-iframe-page';
@@ -79,12 +108,12 @@
     }
 
     &__main {
+      box-sizing: border-box;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: @component-background;
       border: 0;
-      box-sizing: border-box;
+      background-color: @component-background;
     }
   }
 </style>

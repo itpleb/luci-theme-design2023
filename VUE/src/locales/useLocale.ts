@@ -1,19 +1,18 @@
 /**
  * Multi-language related operations
  */
-import type { LocaleType } from '/#/config';
-
-import moment from 'moment';
+import type { LocaleType } from '#/config';
 
 import { i18n } from './setupI18n';
-import { useLocaleStoreWithOut } from '/@/store/modules/locale';
+import { useLocaleStoreWithOut } from '@/store/modules/locale';
 import { unref, computed } from 'vue';
 import { loadLocalePool, setHtmlPageLang } from './helper';
+import { Locale } from 'ant-design-vue/es/locale';
 
 interface LangModule {
   message: Recordable;
-  momentLocale: Recordable;
-  momentLocaleName: string;
+  dateLocale: Recordable;
+  dateLocaleName: string;
 }
 
 function setI18nLanguage(locale: LocaleType) {
@@ -34,7 +33,8 @@ export function useLocale() {
   const getShowLocalePicker = computed(() => localeStore.getShowPicker);
 
   const getAntdLocale = computed((): any => {
-    return i18n.global.getLocaleMessage(unref(getLocale))?.antdLocale ?? {};
+    const localeMessage = i18n.global.getLocaleMessage<{ antdLocale: Locale }>(unref(getLocale));
+    return localeMessage?.antdLocale ?? {};
   });
 
   // Switching the language will change the locale of useI18n
@@ -53,10 +53,9 @@ export function useLocale() {
     const langModule = ((await import(`./lang/${locale}.ts`)) as any).default as LangModule;
     if (!langModule) return;
 
-    const { message, momentLocale, momentLocaleName } = langModule;
+    const { message } = langModule;
 
     globalI18n.setLocaleMessage(locale, message);
-    moment.updateLocale(momentLocaleName, momentLocale);
     loadLocalePool.push(locale);
 
     setI18nLanguage(locale);

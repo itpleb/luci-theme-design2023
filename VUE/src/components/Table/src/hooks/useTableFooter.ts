@@ -2,13 +2,13 @@ import type { ComputedRef, Ref } from 'vue';
 import type { BasicTableProps } from '../types/table';
 import { unref, computed, h, nextTick, watchEffect } from 'vue';
 import TableFooter from '../components/TableFooter.vue';
-import { useEventListener } from '/@/hooks/event/useEventListener';
+import { useEventListener } from '@/hooks/event/useEventListener';
 
 export function useTableFooter(
   propsRef: ComputedRef<BasicTableProps>,
   scrollRef: ComputedRef<{
     x: string | number | true;
-    y: Nullable<number>;
+    y: string | number | null;
     scrollToFirstRowOnChange: boolean;
   }>,
   tableElRef: Ref<ComponentRef>,
@@ -36,14 +36,13 @@ export function useTableFooter(
     nextTick(() => {
       const tableEl = unref(tableElRef);
       if (!tableEl) return;
-      const bodyDomList = tableEl.$el.querySelectorAll('.ant-table-body');
-      const bodyDom = bodyDomList[0];
+      const bodyDom = tableEl.$el.querySelector(' .ant-table-content,  .ant-table-body');
       useEventListener({
         el: bodyDom,
         name: 'scroll',
         listener: () => {
           const footerBodyDom = tableEl.$el.querySelector(
-            '.ant-table-footer .ant-table-body',
+            '.ant-table-footer .ant-table-container  [class^="ant-table-"]',
           ) as HTMLDivElement;
           if (!footerBodyDom || !bodyDom) return;
           footerBodyDom.scrollLeft = bodyDom.scrollLeft;

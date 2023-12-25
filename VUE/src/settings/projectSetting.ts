@@ -1,6 +1,6 @@
-import type { ProjectConfig } from '/#/config';
-import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '/@/enums/menuEnum';
-import { CacheTypeEnum } from '/@/enums/cacheEnum';
+import type { ProjectConfig } from '#/config';
+import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '@/enums/menuEnum';
+import { CacheTypeEnum } from '@/enums/cacheEnum';
 import {
   ContentEnum,
   PermissionModeEnum,
@@ -8,9 +8,12 @@ import {
   RouterTransitionEnum,
   SettingButtonPositionEnum,
   SessionTimeoutProcessingEnum,
-} from '/@/enums/appEnum';
-import { SIDE_BAR_BG_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST } from './designSetting';
-import { primaryColor } from '../../build/config/themeConfig';
+} from '@/enums/appEnum';
+import {
+  SIDE_BAR_BG_COLOR_LIST,
+  HEADER_PRESET_BG_COLOR_LIST,
+  APP_PRESET_COLOR_LIST,
+} from './designSetting';
 
 // ! You need to clear the browser cache after the change
 const setting: ProjectConfig = {
@@ -33,7 +36,7 @@ const setting: ProjectConfig = {
   sessionTimeoutProcessing: SessionTimeoutProcessingEnum.ROUTE_JUMP,
 
   // color
-  themeColor: primaryColor,
+  themeColor: APP_PRESET_COLOR_LIST[0],
 
   // Website gray mode, open for possible mourning dates
   grayMode: false,
@@ -73,6 +76,7 @@ const setting: ProjectConfig = {
     showNotice: true,
     // Whether to display the menu search
     showSearch: true,
+    showApi: true,
   },
 
   // Menu configuration
@@ -83,6 +87,8 @@ const setting: ProjectConfig = {
     fixed: true,
     // Menu collapse
     collapsed: false,
+    // When sider hide because of the responsive layout
+    siderHidden: false,
     // Whether to display the menu name when folding the menu
     collapsedShowTitle: false,
     // Whether it can be dragged
@@ -129,12 +135,14 @@ const setting: ProjectConfig = {
     showRedo: true,
     // Whether to show the collapse button
     showFold: true,
+    // Auto collapsed
+    autoCollapse: false,
   },
 
   // Transition Setting
   transitionSetting: {
     //  Whether to open the page switching animation
-    // The disabled state will also disable pageLoadinng
+    // The disabled state will also disable pageLoading
     enable: true,
 
     // Route basic switching animation

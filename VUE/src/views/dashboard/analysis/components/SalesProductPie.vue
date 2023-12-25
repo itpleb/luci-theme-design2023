@@ -6,7 +6,7 @@
 <script lang="ts" setup>
   import { Ref, ref, watch } from 'vue';
   import { Card } from 'ant-design-vue';
-  import { useECharts } from '/@/hooks/web/useECharts';
+  import { useECharts } from '@/hooks/web/useECharts';
 
   const props = defineProps({
     loading: Boolean,
@@ -22,6 +22,7 @@
 
   const chartRef = ref<HTMLDivElement | null>(null);
   const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
+
   watch(
     () => props.loading,
     () => {

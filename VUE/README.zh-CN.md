@@ -9,7 +9,7 @@
 
 ## 简介
 
-Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3`,`vite2`,`TypeScript`等主流技术开发，开箱即用的中后台前端解决方案，也可用于学习参考。
+Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3`,`vite4`,`TypeScript`等主流技术开发，开箱即用的中后台前端解决方案，也可用于学习参考。
 
 ## 特性
 
@@ -23,9 +23,9 @@ Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3
 
 ## 预览
 
-- [vue-vben-admin](https://vvbin.cn/next/) - 完整版中文站点
+- [vue-vben-admin](https://vben.vvbin.cn/) - 完整版中文站点
 - [vue-vben-admin-gh-pages](https://anncwb.github.io/vue-vben-admin/) - 完整版 github 站点
-- [vben-admin-thin-next](https://vvbin.cn/thin/next/) - 简化版中文站点
+- [vben-admin-thin-next](https://vben.vvbin.cn/thin/next/) - 简化版中文站点
 - [vben-admin-thin-gh-pages](https://anncwb.github.io/vben-admin-thin-next/) - 简化版 github 站点
 
 测试账号: vben/123456
@@ -44,7 +44,7 @@ Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3
 
 ## 文档
 
-[文档地址](https://vvbin.cn/doc-next/)
+[文档地址](https://doc.vvbin.cn/)
 
 ## 准备
 
@@ -54,7 +54,7 @@ Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3
 - [TypeScript](https://www.typescriptlang.org/) - 熟悉`TypeScript`基本语法
 - [Es6+](http://es6.ruanyifeng.com/) - 熟悉 es6 基本语法
 - [Vue-Router-Next](https://next.router.vuejs.org/) - 熟悉 vue-router 基本使用
-- [Ant-Design-Vue](https://2x.antdv.com/docs/vue/introduce-cn/) - ui 基本使用
+- [Ant-Design-Vue](https://antdv.com/docs/vue/introduce-cn/) - ui 基本使用
 - [Mock.js](https://github.com/nuysoft/Mock) - mockjs 基本语法
 
 ## 安装使用
@@ -70,21 +70,39 @@ git clone https://github.com/anncwb/vue-vben-admin.git
 ```bash
 cd vue-vben-admin
 
-yarn install
+pnpm install
 
 ```
 
 - 运行
 
 ```bash
-yarn serve
+pnpm serve
 ```
 
 - 打包
 
 ```bash
-yarn build
+pnpm build
 ```
+
+- docker
+
+### dockerFile 位于项目根目录下 并且支持差异化部署
+
+#### 构建镜像
+
+```bash
+docker build -t vue-vben-admin .
+```
+
+#### 动态使用环境变量实现容器差异化部署,通过不同的 VG_BASE_URL 环境变量，指向不同的后端服务地址，下面例子使用 http://localhost:3333 作为后端服务地址，并且将容器映射到 6666 端口
+
+```bash
+docker run --name vue-vben-admin -d -p 6666:80  -e VG_BASE_URL=http://localhost:3333 vue-vben-admin
+```
+
+而后可以打开 http://localhost:6666 访问
 
 ## 更新日志
 
@@ -141,9 +159,6 @@ yarn build
 
 - [vite-plugin-mock](https://github.com/anncwb/vite-plugin-mock) - 用于本地及开发环境数据 mock
 - [vite-plugin-html](https://github.com/anncwb/vite-plugin-html) - 用于 html 模版转换及压缩
-- [vite-plugin-style-import](https://github.com/anncwb/vite-plugin-style-import) - 用于组件库样式按需引入
-- [vite-plugin-theme](https://github.com/anncwb/vite-plugin-theme) - 用于在线切换主题色等颜色相关配置
-- [vite-plugin-imagemin](https://github.com/anncwb/vite-plugin-imagemin) - 用于打包压缩图片资源
 - [vite-plugin-compression](https://github.com/anncwb/vite-plugin-compression) - 用于打包输出.gz|.brotil 文件
 - [vite-plugin-svg-icons](https://github.com/anncwb/vite-plugin-svg-icons) - 用于快速生成 svg 雪碧图
 
@@ -154,21 +169,21 @@ yarn build
 
 ## 维护者
 
-[@Vben](https://github.com/anncwb)
+[@Vben](https://github.com/anncwb) [@Jinmao](https://github.com/jinmao88)
 
-## 捐赠
+## 感谢
 
-如果你觉得这个项目对你有帮助，你可以帮作者买一杯咖啡表示支持!
-
-![donate](https://anncwb.github.io/anncwb/images/sponsor.png)
-
-<a style="display: block;width: 100px;height: 50px;line-height: 50px; color: #fff;text-align: center; background: #408aed;border-radius: 4px;" href="https://www.paypal.com/paypalme/cvvben">Paypal Me</a>
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo." height='120'>
 
 ## 交流
 
 `Vue-vben-Admin` 是完全开源免费的项目，在帮助开发者更方便地进行中大型管理系统开发，同时也提供 QQ 交流群使用问题欢迎在群内提问。
 
 - QQ 群 `569291866`
+
+## Star 历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=vbenjs/vue-vben-admin&type=Date)](https://star-history.com/#vbenjs/vue-vben-admin&Date)
 
 ## License
 

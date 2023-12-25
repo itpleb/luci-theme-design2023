@@ -1,3 +1,80 @@
+<template>
+  <div class="p-2">
+    <div class="p-4 mb-2 bg-white">
+      <BasicForm @register="registerForm" />
+    </div>
+    <div class="p-2 bg-white">
+      <List
+        :grid="{ gutter: 5, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: grid }"
+        :data-source="data"
+        :pagination="paginationProp"
+      >
+        <template #header>
+          <div class="flex justify-end space-x-2">
+            <slot name="header"> </slot>
+            <Tooltip>
+              <template #title>
+                <div class="w-50">每行显示数量</div>
+                <Slider
+                  id="slider"
+                  v-bind="sliderProp"
+                  v-model:value="grid"
+                  @change="sliderChange"
+                />
+              </template>
+              <a-button><TableOutlined /></a-button>
+            </Tooltip>
+            <Tooltip @click="fetch">
+              <template #title>刷新</template>
+              <a-button><RedoOutlined /></a-button>
+            </Tooltip>
+          </div>
+        </template>
+        <template #renderItem="{ item }">
+          <ListItem>
+            <Card>
+              <template #title></template>
+              <template #cover>
+                <div :class="height">
+                  <Image :src="item.imgs[0]" />
+                </div>
+              </template>
+              <template #actions>
+                <EditOutlined />
+                <Dropdown
+                  :trigger="['hover']"
+                  :dropMenuList="[
+                    {
+                      text: '删除',
+                      event: '1',
+                      popConfirm: {
+                        title: '是否确认删除',
+                        confirm: handleDelete.bind(null, item.id),
+                      },
+                    },
+                  ]"
+                  popconfirm
+                >
+                  <EllipsisOutlined />
+                </Dropdown>
+              </template>
+
+              <CardMeta>
+                <template #title>
+                  <TypographyParagraph :content="item.name" :ellipsis="{ tooltip: item.address }" />
+                </template>
+                <template #avatar>
+                  <Avatar :src="item.avatar" />
+                </template>
+                <template #description>{{ item.time }}</template>
+              </CardMeta>
+            </Card>
+          </ListItem>
+        </template>
+      </List>
+    </div>
+  </div>
+</template>
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue';
   import {
@@ -7,28 +84,23 @@
     TableOutlined,
   } from '@ant-design/icons-vue';
   import { List, Card, Image, Typography, Tooltip, Slider, Avatar } from 'ant-design-vue';
-  import { Dropdown } from '/@/components/Dropdown';
-  import { BasicForm, useForm } from '/@/components/Form';
-  import { Button } from '/@/components/Button';
-  import { isFunction } from '/@/utils/is';
+  import { Dropdown } from '@/components/Dropdown';
+  import { BasicForm, useForm } from '@/components/Form';
+  import { propTypes } from '@/utils/propTypes';
+  import { isFunction } from '@/utils/is';
   import { useSlider, grid } from './data';
+
   const ListItem = List.Item;
   const CardMeta = Card.Meta;
-  const TypographyText = Typography.Text;
+  const TypographyParagraph = Typography.Paragraph;
   // 获取slider属性
   const sliderProp = computed(() => useSlider(4));
   // 组件接收参数
   const props = defineProps({
     // 请求API的参数
-    params: {
-      type: Object,
-      default: () => ({}),
-    },
+    params: propTypes.object.def({}),
     //api
-    api: {
-      type: Function,
-      default: null,
-    },
+    api: propTypes.func,
   });
   //暴露内部方法
   const emit = defineEmits(['getMethod', 'delete']);
@@ -84,100 +156,22 @@
     pageSize,
     current: page,
     total,
-    showTotal: (total) => `总 ${total} 条`,
+    showTotal: (total: number) => `总 ${total} 条`,
     onChange: pageChange,
     onShowSizeChange: pageSizeChange,
   });
 
-  function pageChange(p, pz) {
+  function pageChange(p: number, pz: number) {
     page.value = p;
     pageSize.value = pz;
     fetch();
   }
-  function pageSizeChange(_current, size) {
+  function pageSizeChange(_current, size: number) {
     pageSize.value = size;
     fetch();
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id: number) {
     emit('delete', id);
   }
 </script>
-
-<template>
-  <div class="p-2">
-    <div class="p-4 mb-2 bg-white">
-      <BasicForm @register="registerForm" />
-    </div>
-    {{ sliderProp.width }}
-    <div class="p-2 bg-white">
-      <List
-        :grid="{ gutter: 5, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: grid }"
-        :data-source="data"
-        :pagination="paginationProp"
-      >
-        <template #header>
-          <div class="flex justify-end space-x-2"
-            ><slot name="header"></slot>
-            <Tooltip>
-              <template #title>
-                <div class="w-50">每行显示数量</div
-                ><Slider
-                  id="slider"
-                  v-bind="sliderProp"
-                  v-model:value="grid"
-                  @change="sliderChange"
-              /></template>
-              <Button><TableOutlined /></Button>
-            </Tooltip>
-            <Tooltip @click="fetch">
-              <template #title>刷新</template>
-              <Button><RedoOutlined /></Button>
-            </Tooltip>
-          </div>
-        </template>
-        <template #renderItem="{ item }">
-          <ListItem>
-            <Card>
-              <template #title></template>
-              <template #cover>
-                <div :class="height">
-                  <Image :src="item.imgs[0]" />
-                </div>
-              </template>
-              <template #actions>
-                <EditOutlined key="edit" />
-                <Dropdown
-                  :trigger="['hover']"
-                  :dropMenuList="[
-                    {
-                      text: '删除',
-                      event: '1',
-                      popConfirm: {
-                        title: '是否确认删除',
-                        confirm: handleDelete.bind(null, item.id),
-                      },
-                    },
-                  ]"
-                  popconfirm
-                >
-                  <EllipsisOutlined key="ellipsis" />
-                </Dropdown>
-              </template>
-
-              <CardMeta>
-                <template #title>
-                  <TypographyText :content="item.name" :ellipsis="{ tooltip: item.address }" />
-                </template>
-                <template #avatar>
-                  <Avatar :src="item.avatar" />
-                </template>
-                <template #description>{{ item.time }}</template>
-              </CardMeta>
-            </Card>
-          </ListItem>
-        </template>
-      </List>
-    </div>
-  </div>
-</template>

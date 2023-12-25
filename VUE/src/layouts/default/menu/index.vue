@@ -2,23 +2,23 @@
   import type { PropType, CSSProperties } from 'vue';
 
   import { computed, defineComponent, unref, toRef } from 'vue';
-  import { BasicMenu } from '/@/components/Menu';
-  import { SimpleMenu } from '/@/components/SimpleMenu';
-  import { AppLogo } from '/@/components/Application';
+  import { BasicMenu } from '@/components/Menu';
+  import { SimpleMenu } from '@/components/SimpleMenu';
+  import { AppLogo } from '@/components/Application';
 
-  import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
+  import { MenuModeEnum, MenuSplitTyeEnum } from '@/enums/menuEnum';
 
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
-  import { ScrollContainer } from '/@/components/Container';
+  import { useMenuSetting } from '@/hooks/setting/useMenuSetting';
+  import { ScrollContainer } from '@/components/Container';
 
-  import { useGo } from '/@/hooks/web/usePage';
+  import { useGo } from '@/hooks/web/usePage';
   import { useSplitMenu } from './useLayoutMenu';
-  import { openWindow } from '/@/utils';
-  import { propTypes } from '/@/utils/propTypes';
-  import { isUrl } from '/@/utils/is';
-  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-  import { useAppInject } from '/@/hooks/web/useAppInject';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { openWindow } from '@/utils';
+  import { propTypes } from '@/utils/propTypes';
+  import { isHttpUrl } from '@/utils/is';
+  import { useRootSetting } from '@/hooks/setting/useRootSetting';
+  import { useAppInject } from '@/hooks/web/useAppInject';
+  import { useDesign } from '@/hooks/web/useDesign';
 
   export default defineComponent({
     name: 'LayoutMenu',
@@ -33,7 +33,7 @@
       isHorizontal: propTypes.bool,
       // menu Mode
       menuMode: {
-        type: [String] as PropType<Nullable<MenuModeEnum>>,
+        type: [String] as PropType<MenuModeEnum | null>,
         default: '',
       },
     },
@@ -119,7 +119,7 @@
        * @param menu
        */
       async function beforeMenuClickFn(path: string) {
-        if (!isUrl(path)) {
+        if (!isHttpUrl(path)) {
           return true;
         }
         openWindow(path);
@@ -189,7 +189,7 @@
     &--mobile {
       .@{logo-prefix-cls} {
         &__title {
-          opacity: 100%;
+          opacity: 1;
         }
       }
     }

@@ -5,23 +5,7 @@
   >
     <div
       :class="`${prefixCls}__unlock`"
-      class="
-        absolute
-        top-0
-        left-1/2
-        flex
-        pt-5
-        h-16
-        items-center
-        justify-center
-        sm:text-md
-        xl:text-xl
-        text-white
-        flex-col
-        cursor-pointer
-        transform
-        translate-x-1/2
-      "
+      class="absolute top-0 left-1/2 flex pt-5 h-16 items-center justify-center sm:text-md xl:text-xl text-white flex-col cursor-pointer transform translate-x-1/2"
       @click="handleShowForm(false)"
       v-show="showDate"
     >
@@ -44,9 +28,9 @@
       <div :class="`${prefixCls}-entry`" v-show="!showDate">
         <div :class="`${prefixCls}-entry-content`">
           <div :class="`${prefixCls}-entry__header enter-x`">
-            <img :src="userinfo.avatar || headerImg" :class="`${prefixCls}-entry__header-img`" />
+            <img :src="userInfo.avatar || headerImg" :class="`${prefixCls}-entry__header-img`" />
             <p :class="`${prefixCls}-entry__header-name`">
-              {{ userinfo.realName }}
+              {{ userInfo.realName }}
             </p>
           </div>
           <InputPassword
@@ -95,13 +79,13 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { Input } from 'ant-design-vue';
-  import { useUserStore } from '/@/store/modules/user';
-  import { useLockStore } from '/@/store/modules/lock';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useUserStore } from '@/store/modules/user';
+  import { useLockStore } from '@/store/modules/lock';
+  import { useI18n } from '@/hooks/web/useI18n';
   import { useNow } from './useNow';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useDesign } from '@/hooks/web/useDesign';
   import { LockOutlined } from '@ant-design/icons-vue';
-  import headerImg from '/@/assets/images/header.jpg';
+  import headerImg from '@/assets/images/header.jpg';
 
   const InputPassword = Input.Password;
 
@@ -118,7 +102,7 @@
 
   const { t } = useI18n();
 
-  const userinfo = computed(() => {
+  const userInfo = computed(() => {
     return userStore.getUserInfo || {};
   });
 
@@ -149,6 +133,7 @@
   }
 </script>
 <style lang="less" scoped>
+  /* stylelint-disable media-query-no-invalid */
   @prefix-cls: ~'@{namespace}-lock-page';
 
   .@{prefix-cls} {
@@ -161,12 +146,12 @@
     &__hour,
     &__minute {
       display: flex;
-      font-weight: 700;
-      color: #bababa;
-      background-color: #141313;
-      border-radius: 30px;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+      background-color: #141313;
+      color: #bababa;
+      font-weight: 700;
 
       @media screen and (max-width: @screen-md) {
         span:not(.meridiem) {
@@ -185,6 +170,7 @@
           font-size: 90px;
         }
       }
+
       @media screen and (min-width: @screen-lg) {
         span:not(.meridiem) {
           font-size: 220px;
@@ -196,6 +182,7 @@
           font-size: 260px;
         }
       }
+
       @media screen and (min-width: @screen-2xl) {
         span:not(.meridiem) {
           font-size: 320px;
@@ -204,16 +191,16 @@
     }
 
     &-entry {
+      display: flex;
       position: absolute;
       top: 0;
       left: 0;
-      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
       height: 100%;
       background-color: rgb(0 0 0 / 50%);
       backdrop-filter: blur(8px);
-      justify-content: center;
-      align-items: center;
 
       &-content {
         width: 260px;
@@ -230,8 +217,8 @@
 
         &-name {
           margin-top: 5px;
-          font-weight: 500;
           color: #bababa;
+          font-weight: 500;
         }
       }
 

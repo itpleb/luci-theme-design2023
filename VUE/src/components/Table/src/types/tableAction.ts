@@ -1,6 +1,7 @@
 import { ButtonProps } from 'ant-design-vue/es/button/buttonTypes';
 import { TooltipProps } from 'ant-design-vue/es/tooltip/Tooltip';
-import { RoleEnum } from '/@/enums/roleEnum';
+import { RoleEnum } from '@/enums/roleEnum';
+
 export interface ActionItem extends ButtonProps {
   onClick?: Fn;
   label?: string;
@@ -23,4 +24,17 @@ export interface PopConfirm {
   confirm: Fn;
   cancel?: Fn;
   icon?: string;
+  placement?:
+    | 'top'
+    | 'left'
+    | 'right'
+    | 'bottom'
+    | 'topLeft'
+    | 'topRight'
+    | 'leftTop'
+    | 'leftBottom'
+    | 'rightTop'
+    | 'rightBottom'
+    | 'bottomLeft'
+    | 'bottomRight';
 }

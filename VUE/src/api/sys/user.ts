@@ -1,13 +1,14 @@
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
 
-import { ErrorMessageMode } from '/#/axios';
+import { ErrorMessageMode } from '#/axios';
 
 enum Api {
   Login = '/auth', // '/login',
   Logout = '/logout',
   GetUserInfo = '/getUserInfo',
   GetPermCode = '/getPermCode',
+  TestRetry = '/testRetry',
 }
 
 /**
@@ -18,8 +19,9 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     {
       url: Api.Login,
       // params,
+      luciAuth: true,
       data: JSON.stringify({ method: 'login', params: [params.username, params.password] }),
-    },
+    } as any,
     {
       errorMessageMode: mode,
     },
@@ -39,4 +41,17 @@ export function getPermCode() {
 
 export function doLogout() {
   return defHttp.get({ url: Api.Logout });
+}
+
+export function testRetry() {
+  return defHttp.get(
+    { url: Api.TestRetry },
+    {
+      retryRequest: {
+        isOpenRetry: true,
+        count: 5,
+        waitTime: 1000,
+      },
+    },
+  );
 }

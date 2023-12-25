@@ -9,15 +9,16 @@ import type {
   TableRowSelection,
   SizeType,
 } from './types/table';
-import type { FormProps } from '/@/components/Form';
+import type { FormProps } from '@/components/Form';
+
 import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING, DEFAULT_SIZE } from './const';
-import { propTypes } from '/@/utils/propTypes';
+import { propTypes } from '@/utils/propTypes';
 
 export const basicProps = {
-  clickToRowSelect: propTypes.bool.def(true),
-  isTreeTable: propTypes.bool.def(false),
+  clickToRowSelect: { type: Boolean, default: true },
+  isTreeTable: Boolean,
   tableSetting: propTypes.shape<TableSetting>({}),
-  inset: propTypes.bool,
+  inset: Boolean,
   sortFn: {
     type: Function as PropType<(sortInfo: SorterResult) => any>,
     default: DEFAULT_SORT_FN,
@@ -26,10 +27,10 @@ export const basicProps = {
     type: Function as PropType<(data: Partial<Recordable<string[]>>) => any>,
     default: DEFAULT_FILTER_FN,
   },
-  showTableSetting: propTypes.bool,
-  autoCreateKey: propTypes.bool.def(true),
-  striped: propTypes.bool.def(true),
-  showSummary: propTypes.bool,
+  showTableSetting: Boolean,
+  autoCreateKey: { type: Boolean, default: true },
+  striped: { type: Boolean, default: true },
+  showSummary: Boolean,
   summaryFunc: {
     type: [Function, Array] as PropType<(...arg: any[]) => any[]>,
     default: null,
@@ -39,7 +40,7 @@ export const basicProps = {
     default: null,
   },
   indentSize: propTypes.number.def(24),
-  canColDrag: propTypes.bool.def(true),
+  canColDrag: { type: Boolean, default: true },
   api: {
     type: Function as PropType<(...arg: any[]) => Promise<any>>,
     default: null,
@@ -63,8 +64,8 @@ export const basicProps = {
     },
   },
   // 立即请求接口
-  immediate: propTypes.bool.def(true),
-  emptyDataIsShowTable: propTypes.bool.def(true),
+  immediate: { type: Boolean, default: true },
+  emptyDataIsShowTable: { type: Boolean, default: true },
   // 额外的请求参数
   searchInfo: {
     type: Object as PropType<Recordable>,
@@ -83,10 +84,10 @@ export const basicProps = {
     default: null,
   },
   columns: {
-    type: [Array] as PropType<BasicColumn[]>,
+    type: Array as PropType<BasicColumn[]>,
     default: () => [],
   },
-  showIndexColumn: propTypes.bool.def(true),
+  showIndexColumn: { type: Boolean, default: true },
   indexColumnProps: {
     type: Object as PropType<BasicColumn>,
     default: null,
@@ -95,8 +96,9 @@ export const basicProps = {
     type: Object as PropType<BasicColumn>,
     default: null,
   },
-  ellipsis: propTypes.bool.def(true),
-  canResize: propTypes.bool.def(true),
+  ellipsis: { type: Boolean, default: true },
+  isCanResizeParent: { type: Boolean, default: false },
+  canResize: { type: Boolean, default: true },
   clearSelectOnPageChange: propTypes.bool,
   resizeHeightOffset: propTypes.number.def(0),
   rowSelection: {
@@ -129,7 +131,7 @@ export const basicProps = {
     type: Function as PropType<(record: TableCustomRecord<any>, index: number) => string>,
   },
   scroll: {
-    type: Object as PropType<{ x: number | true; y: number }>,
+    type: Object as PropType<{ x: number | string | true; y: number | string }>,
     default: null,
   },
   beforeEditSubmit: {

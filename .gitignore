@@ -1,33 +1,33 @@
-VUE/node_modules
+ODesign/node_modules
 .DS_Store
-VUE/dist
-VUE/.npmrc
-VUE/.cache
+ODesign/dist
+ODesign/.npmrc
+ODesign/.cache
 
-VUE/tests/server/static
-VUE/ests/server/static/upload
+ODesign/tests/server/static
+ODesign/ests/server/static/upload
 
 .local
 # local env files
-VUE/.env.local
-VUE/.env.*.local
-VUE/.eslintcache
+ODesign/.env.local
+ODesign/.env.*.local
+ODesign/.eslintcache
 
 # Log files
-VUE/npm-debug.log*
-VUE/yarn-debug.log*
-VUE/yarn-error.log*
-VUE/pnpm-debug.log*
+ODesign/npm-debug.log*
+ODesign/yarn-debug.log*
+ODesign/yarn-error.log*
+ODesign/pnpm-debug.log*
 
 # Editor directories and files
-VUE/.idea
+ODesign/.idea
 # .vscode
-VUE/*.suo
-VUE/*.ntvs*
-VUE/*.njsproj
-VUE/*.sln
-VUE/*.sw?
+ODesign/*.suo
+ODesign/*.ntvs*
+ODesign/*.njsproj
+ODesign/*.sln
+ODesign/*.sw?
 
-VUE/package-lock.json
-VUE/pnpm-lock.yaml
+ODesign/package-lock.json
+ODesign/pnpm-lock.yaml
 

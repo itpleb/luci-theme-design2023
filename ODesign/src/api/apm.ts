@@ -3,6 +3,7 @@ import { request } from '@/utils/request';
 const Api = {
   Login: '/auth',
   Logout: '/logout',
+  ApList: '/list',
 };
 
 export function login(userInfo: Record<string, unknown>) {
@@ -16,4 +17,10 @@ export function login(userInfo: Record<string, unknown>) {
       isReturnNativeResponse: true,
     },
   );
+}
+
+export function getApList() {
+  return request.get<any>({
+    url: Api.ApList,
+  });
 }

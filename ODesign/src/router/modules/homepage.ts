@@ -7,7 +7,7 @@ export default [
   {
     path: '/dashboard',
     component: Layout,
-    redirect: '/dashboard/base',
+    redirect: '/dashboard',
     name: 'dashboard',
     meta: {
       title: {
@@ -18,6 +18,17 @@ export default [
       orderNo: 0,
     },
     children: [
+      {
+        path: '',
+        name: 'DashboardOverview',
+        component: () => import('@/pages/dashboard/index.vue'),
+        meta: {
+          title: {
+            zh_CN: '概览',
+            en_US: 'Overview',
+          },
+        },
+      },
       {
         path: 'base',
         name: 'DashboardBase',

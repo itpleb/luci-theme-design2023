@@ -85,7 +85,7 @@ const AP_COLUMNS: TdBaseTableProps['columns'] = [
   {
     align: 'center',
     colKey: 'macaddr',
-    width: 10,
+    width: 70,
     title: t('pages.dashboard.apColumns.macaddr'),
   },
   {

@@ -1,4 +1,7 @@
+import { RequestOptions } from '@/types/axios';
 import { request } from '@/utils/request';
+import { AxiosRequestConfig } from 'axios';
+import { encryptRsaString } from '@/utils/encrypt';
 
 const Api = {
   Login: '/auth',
@@ -6,12 +9,23 @@ const Api = {
   ApList: '/list',
 };
 
+const apmGet = <T = any>(config: AxiosRequestConfig | any, options?: RequestOptions): Promise<T> => {
+  config.luciAuth = true;
+  return request.get<T>(config, options);
+};
+
+const apmPost = <T = any>(config: AxiosRequestConfig | any, options?: RequestOptions): Promise<T> => {
+  config.luciAuth = true;
+  return request.post<T>(config, options);
+};
+
 export function login(userInfo: Record<string, unknown>) {
-  return request.post<any>(
+  const rsaPwd = encryptRsaString(userInfo.password);
+  console.log('rsaPwd: ', rsaPwd);
+  return apmPost<any>(
     {
       url: Api.Login,
-      // luciAuth: true,
-      data: JSON.stringify({ method: 'login', params: [userInfo.account, userInfo.password] }),
+      data: JSON.stringify({ method: 'login', params: [userInfo.account, rsaPwd] }),
     },
     {
       isReturnNativeResponse: true,
@@ -20,7 +34,7 @@ export function login(userInfo: Record<string, unknown>) {
 }
 
 export function getApList() {
-  return request.get<any>({
+  return apmGet<any>({
     url: Api.ApList,
-  });
+  } as any);
 }

@@ -62,7 +62,7 @@ import Trend from '@/components/trend/index.vue';
 import { t } from '@/locales';
 
 import { BUY_TEND_LIST, SALE_TEND_LIST } from '../constants';
-import { onMounted, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
 import { getApList } from '@/api/apm';
 
 const AP_LIST = ref([]);
@@ -145,20 +145,34 @@ const rehandleClickOp = (val: MouseEvent) => {
 const getRankClass = (index: number) => {
   return ['dashboard-rank', { 'dashboard-rank__top': index < 3 }];
 };
-
+const fnGetApListStarting = ref(false);
 onMounted(() => {
+  fnGetApListStarting.value = true;
   console.log('onMounted　fnGetApList');
   const fnGetApList = () => {
-    getApList().then((data) => {
-      console.log('fnGetApList: ', data);
-      setTimeout(() => {
-        fnGetApList();
-      }, 3000);
-    });
+    if (!fnGetApListStarting.value) {
+      return;
+    }
+    getApList()
+      .then((data) => {
+        console.log('fnGetApList: ', data);
+        setTimeout(() => {
+          fnGetApList();
+        }, 3000);
+      })
+      .catch(() => {
+        setTimeout(() => {
+          fnGetApList();
+        }, 3000);
+      });
   };
   setTimeout(() => {
     fnGetApList();
   }, 3000);
+});
+
+onBeforeUnmount(() => {
+  fnGetApListStarting.value = false;
 });
 </script>
 

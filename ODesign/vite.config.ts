@@ -49,9 +49,9 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       // },
       proxy: {
         '/cgi-bin/luci/apm': {
-          target: 'http://192.168.6.1/cgi-bin/luci/apm',
+          target: 'http://192.168.6.1/cgi-bin/luci/apm/',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/\/cgi-bin\/luci\/apm/, ''),
+          rewrite: (path) => path.replace(/\/cgi-bin\/luci\/apm\//, ''),
         },
       },
     },

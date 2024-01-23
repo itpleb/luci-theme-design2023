@@ -16,7 +16,9 @@ export default {
     info: 'Detail',
   },
   topPanel: {
-    card1: 'Total Revenue',
+    memory: 'Memory',
+    memoryAvailable: 'Available',
+    memoryCached: 'Cached',
     card2: 'Total Refund',
     card3: 'Active User(s)',
     card4: 'Generate Order(s)',

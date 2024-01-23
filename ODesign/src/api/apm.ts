@@ -8,7 +8,7 @@ const Api = {
   Logout: '/logout',
   ApList: '/list',
 };
-
+//https://192.168.6.1/cgi-bin/luci/?status=1&_=0.0022052374561096766
 const apmGet = <T = any>(config: AxiosRequestConfig | any, options?: RequestOptions): Promise<T> => {
   config.luciAuth = true;
   return request.get<T>(config, options);
@@ -20,7 +20,8 @@ const apmPost = <T = any>(config: AxiosRequestConfig | any, options?: RequestOpt
 };
 
 export function login(userInfo: Record<string, unknown>) {
-  const rsaPwd = encryptRsaString(userInfo.password);
+  const useEncryptPWD = false;
+  const rsaPwd = useEncryptPWD ? encryptRsaString(userInfo.password) : userInfo.password;
   console.log('rsaPwd: ', rsaPwd);
   return apmPost<any>(
     {

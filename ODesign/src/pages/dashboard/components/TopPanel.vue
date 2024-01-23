@@ -1,48 +1,136 @@
 <template>
   <t-row :gutter="[16, 16]">
-    <t-col v-for="(item, index) in PANE_LIST" :key="item.title" :xs="6" :xl="3">
+    <t-col :xs="6" :xl="3">
       <t-card
-        :title="t(item.title)"
+        :title="t('pages.dashboard.topPanel.memory') + ' ' + memoryInfo.total"
         :bordered="false"
-        :class="{ 'dashboard-item': true, 'dashboard-item--main-color': index == 0 }"
+        :class="{ 'dashboard-item': true, 'dashboard-item--main-color': '0' == -1110 }"
       >
-        <div class="dashboard-item-top">
-          <span :style="{ fontSize: `${resizeTime * 28}px` }">{{ item.number }}</span>
-        </div>
-        <div class="dashboard-item-left">
-          <div
-            v-if="index === 0"
-            id="moneyContainer"
-            class="dashboard-chart-container"
-            :style="{ width: `${resizeTime * 120}px`, height: '100px', marginTop: '-24px' }"
-          ></div>
-          <div
-            v-else-if="index === 1"
-            id="refundContainer"
-            class="dashboard-chart-container"
-            :style="{ width: `${resizeTime * 120}px`, height: '56px', marginTop: '-24px' }"
-          ></div>
-          <span v-else-if="index === 2" :style="{ marginTop: `-24px` }">
-            <usergroup-icon />
-          </span>
-          <span v-else :style="{ marginTop: '-24px' }">
-            <file-icon />
-          </span>
-        </div>
-        <template #footer>
-          <div class="dashboard-item-bottom">
-            <div class="dashboard-item-block">
-              {{ $t('pages.dashboard.topPanel.cardTips') }}
-              <trend
-                class="dashboard-item-trend"
-                :type="item.upTrend ? 'up' : 'down'"
-                :is-reverse-color="index === 0"
-                :describe="item.upTrend || item.downTrend"
-              />
-            </div>
-            <t-icon name="chevron-right" />
-          </div>
+        <template #actions>
+          {{
+            t('pages.dashboard.topPanel.averageLoad') +
+            ' ' +
+            String.format(
+              '%.02f, %.02f, %.02f',
+              (SystemOverview.loadavg[0] / 65535.0).toFixed(2),
+              (SystemOverview.loadavg[1] / 65535.0).toFixed(2),
+              (SystemOverview.loadavg[2] / 65535.0).toFixed(2),
+            )
+          }}
         </template>
+        <t-space>
+          <!-- <span :style="{ fontSize: `${resizeTime * 28}px` }">{{ item.number }}</span> -->
+          <t-space direction="vertical" align="center" :size="9">
+            <t-progress
+              theme="circle"
+              :label="memoryInfo.availablePercentage + '%'"
+              :percentage="memoryInfo.availablePercentage"
+              :size="'small'"
+              :status="'success'"
+            ></t-progress>
+            <div>{{ t('pages.dashboard.topPanel.memoryAvailable') }}</div>
+          </t-space>
+          <t-space direction="vertical" align="center" :size="9">
+            <t-progress
+              theme="circle"
+              :label="memoryInfo.cachedPercentage + '%'"
+              :percentage="memoryInfo.cachedPercentage"
+              :size="'small'"
+              :status="'error'"
+            ></t-progress>
+            <div>{{ t('pages.dashboard.topPanel.memoryCached') }}</div>
+          </t-space>
+          <t-space direction="vertical" align="center" :size="9">
+            <t-progress
+              theme="circle"
+              :label="memoryInfo.availablePercentage + '%'"
+              :percentage="memoryInfo.availablePercentage"
+              :size="'small'"
+              :status="'error'"
+            ></t-progress>
+            <div>{{ t('pages.dashboard.topPanel.cpuusage') }}</div>
+          </t-space>
+        </t-space>
+      </t-card>
+    </t-col>
+    <t-col :xs="6" :xl="3">
+      <t-card
+        title=""
+        :bordered="false"
+        :class="{ 'dashboard-item systemOverview-1': true, 'dashboard-item--main-color': '0' == -1110 }"
+      >
+        <div class="t-table t-size-s t-table--striped t-table--column-resizable systemOverview" tabindex="0">
+          <div class="t-table__content">
+            <table class="t-table--layout-auto">
+              <tbody class="t-table__body">
+                <tr class="">
+                  <td class="title">{{ t('pages.dashboard.topPanel.onlineUser') }}</td>
+                  <td class="content">{{ SystemOverview.userinfo }}</td>
+                </tr>
+                <tr class="">
+                  <td class="">{{ t('pages.dashboard.topPanel.onlineConnection') }}</td>
+                  <td class="">
+                    <div class="t-progress">
+                      <div
+                        class="t-progress__bar t-progress--plump t-progress--under-ten t-progress--status--default conn-progress"
+                      >
+                        <div
+                          class="t-progress__inner"
+                          :style="{
+                            width: parseInt((SystemOverview.conncount / SystemOverview.connmax) * 100) + 'px',
+                          }"
+                        ></div>
+                        <div class="t-progress__info conn-progress-info">
+                          {{
+                            SystemOverview.conncount +
+                            ' / ' +
+                            SystemOverview.connmax +
+                            '(' +
+                            parseInt((SystemOverview.conncount / SystemOverview.connmax) * 100) +
+                            '%)'
+                          }}
+                        </div>
+                      </div>
+                      <!---->
+                    </div>
+                  </td>
+                </tr>
+                <tr class="">
+                  <td class="">{{ t('pages.dashboard.topPanel.localTime') }}</td>
+                  <td class="">{{ SystemOverview.localtime }}</td>
+                </tr>
+                <tr class="">
+                  <td class="">{{ t('pages.dashboard.topPanel.uptime') }}</td>
+                  <td class="">{{ String.format('%t', SystemOverview.uptime) }}</td>
+                </tr>
+                <!-- <tr class="">
+                  <td class="">纸质签署</td>
+                  <td class="">2022-01-01</td>
+                </tr> -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </t-card>
+    </t-col>
+    <t-col :xs="6" :xl="3">
+      <t-card
+        :title="'IPv4 ' + t('pages.dashboard.topPanel.system')"
+        :bordered="false"
+        :class="{ 'dashboard-item': true, 'dashboard-item--main-color': '0' == -1110 }"
+      >
+        <template #actions>
+          <t-link href="javascript:void(0)" style="line-height: 24px" @click="openNetworkSetting">操作</t-link>
+        </template>
+        <t-list>
+          <t-list-item> WAN 类型：dhcp </t-list-item>
+          <t-list-item> 地址：192.168.7.178 </t-list-item>
+          <t-list-item> 子网掩码：255.255.255.0 </t-list-item>
+          <t-list-item> 网关：192.168.7.1 </t-list-item>
+          <t-list-item> DNS 1：192.168.7.1 </t-list-item>
+          <t-list-item> 到期时间：7h 25m 37s </t-list-item>
+          <t-list-item> 已连接：4h 34m 23s </t-list-item>
+        </t-list>
       </t-card>
     </t-col>
   </t-row>
@@ -60,7 +148,7 @@ import { BarChart, LineChart } from 'echarts/charts';
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { FileIcon, UsergroupIcon } from 'tdesign-icons-vue-next';
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch, computed, defineProps } from 'vue';
 
 // 导入样式
 import Trend from '@/components/trend/index.vue';
@@ -70,17 +158,71 @@ import { changeChartsTheme } from '@/utils/color';
 
 import { constructInitDashboardDataset } from '../index';
 
+import '@/utils/cbi';
+
+import { ISystemOverview } from '@/api/model/systemOverview';
+const props = defineProps({
+  SystemOverview: {} as any as ISystemOverview,
+});
+
 echarts.use([LineChart, BarChart, CanvasRenderer]);
+const memoryInfoRef = ref({
+  total: 522846208,
+  shared: 1646592,
+  free: 410247168,
+  cached: 29904896,
+  available: 388775936,
+  buffered: 8536064,
+});
+const wanInfoRef = ref({
+  proto: 'dhcp',
+  ipaddr: '192.168.7.178',
+  link: '/cgi-bin/luci/admin/network/network/wan',
+  netmask: '255.255.255.0',
+  gwaddr: '192.168.7.1',
+  expires: 37666,
+  uptime: 5534,
+  ifname: 'wan',
+  dns: ['192.168.7.1'],
+});
+
+const memoryInfo = computed(() => {
+  const cached = `${parseInt(memoryInfoRef.value.cached / 1024 / 1024)} MB`;
+  const available = `${parseInt(memoryInfoRef.value.available / 1024 / 1024)} MB`;
+  const availablePercentage = parseInt((memoryInfoRef.value.available / memoryInfoRef.value.total) * 100);
+  const cachedPercentage = parseInt((memoryInfoRef.value.cached / memoryInfoRef.value.total) * 100);
+  const cachedLabel = `${cached}<br>${cachedPercentage}`;
+  const availableLabel = `${available}\r\n${availablePercentage}`;
+  return {
+    total: parseInt(memoryInfoRef.value.total / 1024 / 1024) + ' MB',
+    availablePercentage,
+    cachedPercentage,
+    available,
+    cached,
+    // shared: parseInt(memoryInfoRef.value.shared / 1024 / 1024) + ' MB',
+    // free: parseInt(memoryInfoRef.value.free / 1024 / 1024) + ' MB',
+    // buffered: parseInt(memoryInfoRef.value.buffered / 1024 / 1024) + ' MB',
+  };
+});
+
+const openNetworkSetting = () => {};
 
 const store = useSettingStore();
 const resizeTime = ref(1);
 
 const PANE_LIST = [
   {
-    title: 'pages.dashboard.topPanel.card1',
+    title: 'pages.dashboard.topPanel.memory',
+    type: 'memory',
     number: '¥ 28,425.00',
     upTrend: '20.5%',
     leftType: 'echarts-line',
+    total: 522846208,
+    shared: 1646592,
+    free: 410247168,
+    cached: 29904896,
+    available: 388775936,
+    buffered: 8536064,
   },
   {
     title: 'pages.dashboard.topPanel.card2',
@@ -138,14 +280,14 @@ const updateContainer = () => {
   } else {
     resizeTime.value = 1;
   }
-  moneyChart.resize({
-    width: resizeTime.value * 120,
-    // height: resizeTime.value * 100,
-  });
-  refundChart.resize({
-    width: resizeTime.value * 120,
-    // height: resizeTime.value * 56,
-  });
+  // moneyChart.resize({
+  //   width: resizeTime.value * 120,
+  //   // height: resizeTime.value * 100,
+  // });
+  // refundChart.resize({
+  //   width: resizeTime.value * 120,
+  //   // height: resizeTime.value * 56,
+  // });
 };
 
 onMounted(() => {
@@ -189,6 +331,8 @@ watch(
 
   :deep(.t-card__footer) {
     padding: 0;
+    // display: none;
+    text-align: center;
   }
 
   :deep(.t-card__title) {
@@ -204,7 +348,11 @@ watch(
     position: relative;
     padding: 0;
     margin-top: var(--td-comp-margin-s);
-    margin-bottom: var(--td-comp-margin-xxl);
+    // margin-bottom: var(--td-comp-margin-xxl);
+  }
+
+  :deep(.t-list-item) {
+    padding: 0;
   }
 
   &:hover {
@@ -286,6 +434,34 @@ watch(
 
     .dashboard-item-bottom {
       color: var(--td-text-color-anti);
+    }
+  }
+}
+
+:deep(.conn-progress) {
+  position: relative;
+  .conn-progress-info {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    left: 0px;
+    margin: 0;
+  }
+}
+.systemOverview-1 {
+  padding-top: 10.5px;
+  padding-bottom: 10.5px;
+  table {
+    td {
+      white-space: nowrap !important;
+    }
+    td.title {
+      width: auto;
+      padding-right: 5px;
+    }
+    td.content {
+      width: 100%;
+      min-width: 150px;
     }
   }
 }

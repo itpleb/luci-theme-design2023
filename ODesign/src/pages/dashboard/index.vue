@@ -2,6 +2,7 @@
   <div>
     <!-- 顶部 card  -->
     <top-panel class="row-container" :SystemOverview="SystemOverviewRef" />
+
     <div class="row-container">
       <t-row :gutter="[16, 16]">
         <t-col :xs="6" :xl="3">
@@ -22,27 +23,29 @@
                   <tbody class="t-table__body">
                     <tr class="">
                       <td class="title">{{ t('pages.dashboard.deviceModel') }}</td>
-                      <td class="content">{{ SystemOverviewRef.deviceModel }}</td>
+                      <td class="content">{{ systemRef.boardinfo.model }}</td>
                     </tr>
                     <tr class="">
                       <td class="title">{{ t('pages.dashboard.cpuinfo') }}</td>
                       <td class="content">{{ SystemOverviewRef.cpuinfo }}</td>
                     </tr>
-                    <tr class="">
+                    <!-- <tr class="">
                       <td class="title">{{ t('pages.dashboard.temperature') }}</td>
                       <td class="content">{{ SystemOverviewRef.temperature }}</td>
-                    </tr>
+                    </tr> -->
                     <tr class="">
                       <td class="title">{{ t('pages.dashboard.targetPlatform') }}</td>
-                      <td class="content">{{ SystemOverviewRef.targetPlatform }}</td>
+                      <td class="content">{{ systemRef.boardinfo.release.target }}</td>
                     </tr>
                     <tr class="">
                       <td class="title">{{ t('pages.dashboard.firmwareVersion') }}</td>
-                      <td class="content">{{ SystemOverviewRef.firmwareVersion }}</td>
+                      <td class="content">
+                        {{ systemRef.boardinfo.release.distribution + ' ' + systemRef.boardinfo.release.revision }}
+                      </td>
                     </tr>
                     <tr class="">
                       <td class="title">{{ t('pages.dashboard.kernelVersion') }}</td>
-                      <td class="content">{{ SystemOverviewRef.kernelVersion }}</td>
+                      <td class="content">{{ systemRef.boardinfo.kernel }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -195,6 +198,24 @@ const SystemOverviewRef = ref({
   localtime: 'Wed Jan 24 00:48:52 2024',
   cpuusage: '0%',
   loadavg: [0, 0, 0],
+});
+
+const systemRef = ref({
+  boardinfo: {
+    board_name: 'jdcloud,re-sp-01b',
+    rootfs_type: 'squashfs',
+    hostname: 'OpenWrt',
+    release: {
+      distribution: 'OpenWrt',
+      revision: 'R23.11.11',
+      version: 'SNAPSHOT',
+      target: 'ramips/mt7621',
+      description: 'OpenWrt ',
+    },
+    model: 'JDCloud RE-SP-01B',
+    kernel: '5.4.266',
+    system: 'MediaTek MT7621 ver:1 eco:3',
+  },
 });
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <t-row :gutter="[16, 16]">
-    <t-col :xs="6" :xl="3">
+    <t-col flex="340px">
       <t-card
         :title="t('pages.dashboard.topPanel.memory') + ' ' + memoryInfo.total"
         :bordered="false"
@@ -53,7 +53,7 @@
         </t-space>
       </t-card>
     </t-col>
-    <t-col :xs="6" :xl="3">
+    <t-col flex="340px">
       <t-card
         title=""
         :bordered="false"
@@ -113,7 +113,7 @@
         </div>
       </t-card>
     </t-col>
-    <t-col :xs="6" :xl="3">
+    <t-col>
       <t-card
         :title="'IPv4 ' + t('pages.dashboard.topPanel.system')"
         :bordered="false"
@@ -147,11 +147,9 @@ import { useWindowSize } from '@vueuse/core';
 import { BarChart, LineChart } from 'echarts/charts';
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { FileIcon, UsergroupIcon } from 'tdesign-icons-vue-next';
 import { nextTick, onMounted, ref, watch, computed, defineProps } from 'vue';
 
 // 导入样式
-import Trend from '@/components/trend/index.vue';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
 import { changeChartsTheme } from '@/utils/color';
@@ -173,17 +171,6 @@ const memoryInfoRef = ref({
   cached: 29904896,
   available: 388775936,
   buffered: 8536064,
-});
-const wanInfoRef = ref({
-  proto: 'dhcp',
-  ipaddr: '192.168.7.178',
-  link: '/cgi-bin/luci/admin/network/network/wan',
-  netmask: '255.255.255.0',
-  gwaddr: '192.168.7.1',
-  expires: 37666,
-  uptime: 5534,
-  ifname: 'wan',
-  dns: ['192.168.7.1'],
 });
 
 const memoryInfo = computed(() => {
@@ -449,8 +436,7 @@ watch(
   }
 }
 .systemOverview-1 {
-  padding-top: 10.5px;
-  padding-bottom: 10.5px;
+  padding: 10.5px;
   table {
     td {
       white-space: nowrap !important;

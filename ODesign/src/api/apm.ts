@@ -19,7 +19,7 @@ const apmPost = <T = any>(config: AxiosRequestConfig | any, options?: RequestOpt
   return request.post<T>(config, options);
 };
 
-export function login(userInfo: Record<string, unknown>) {
+export function login(userInfo: Record<string, unknown> | any) {
   const useEncryptPWD = false;
   const rsaPwd = useEncryptPWD ? encryptRsaString(userInfo.password) : userInfo.password;
   console.log('rsaPwd: ', rsaPwd);

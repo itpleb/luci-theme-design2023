@@ -4,13 +4,13 @@
       <t-card
         :title="t('pages.dashboard.topPanel.memory') + ' ' + memoryInfo.total"
         :bordered="false"
-        :class="{ 'dashboard-item': true, 'dashboard-item--main-color': '0' == -1110 }"
+        :class="{ 'dashboard-item': true, 'dashboard-item--main-color': false }"
       >
         <template #actions>
           {{
             t('pages.dashboard.topPanel.averageLoad') +
             ' ' +
-            String.format(
+            StringExtensions.format(
               '%.02f, %.02f, %.02f',
               (SystemOverview.loadavg[0] / 65535.0).toFixed(2),
               (SystemOverview.loadavg[1] / 65535.0).toFixed(2),
@@ -57,7 +57,7 @@
       <t-card
         title=""
         :bordered="false"
-        :class="{ 'dashboard-item systemOverview-1': true, 'dashboard-item--main-color': '0' == -1110 }"
+        :class="{ 'dashboard-item systemOverview-1': true, 'dashboard-item--main-color': false }"
       >
         <div class="t-table t-size-s t-table--striped t-table--column-resizable systemOverview" tabindex="0">
           <div class="t-table__content">
@@ -77,7 +77,7 @@
                         <div
                           class="t-progress__inner"
                           :style="{
-                            width: parseInt((SystemOverview.conncount / SystemOverview.connmax) * 100) + 'px',
+                            width: Math.floor((SystemOverview.conncount / SystemOverview.connmax) * 100) + 'px',
                           }"
                         ></div>
                         <div class="t-progress__info conn-progress-info">
@@ -86,7 +86,7 @@
                             ' / ' +
                             SystemOverview.connmax +
                             '(' +
-                            parseInt((SystemOverview.conncount / SystemOverview.connmax) * 100) +
+                            parseInt(((SystemOverview.conncount / SystemOverview.connmax) * 100).toString()) +
                             '%)'
                           }}
                         </div>
@@ -101,7 +101,7 @@
                 </tr>
                 <tr class="">
                   <td class="">{{ t('pages.dashboard.topPanel.uptime') }}</td>
-                  <td class="">{{ String.format('%t', SystemOverview.uptime) }}</td>
+                  <td class="">{{ StringExtensions.format('%t', SystemOverview.uptime) }}</td>
                 </tr>
                 <!-- <tr class="">
                   <td class="">纸质签署</td>
@@ -111,26 +111,6 @@
             </table>
           </div>
         </div>
-      </t-card>
-    </t-col>
-    <t-col>
-      <t-card
-        :title="'IPv4 ' + t('pages.dashboard.topPanel.system')"
-        :bordered="false"
-        :class="{ 'dashboard-item': true, 'dashboard-item--main-color': '0' == -1110 }"
-      >
-        <template #actions>
-          <t-link href="javascript:void(0)" style="line-height: 24px" @click="openNetworkSetting">操作</t-link>
-        </template>
-        <t-list>
-          <t-list-item> WAN 类型：dhcp </t-list-item>
-          <t-list-item> 地址：192.168.7.178 </t-list-item>
-          <t-list-item> 子网掩码：255.255.255.0 </t-list-item>
-          <t-list-item> 网关：192.168.7.1 </t-list-item>
-          <t-list-item> DNS 1：192.168.7.1 </t-list-item>
-          <t-list-item> 到期时间：7h 25m 37s </t-list-item>
-          <t-list-item> 已连接：4h 34m 23s </t-list-item>
-        </t-list>
       </t-card>
     </t-col>
   </t-row>
@@ -143,120 +123,47 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { StringExtensions } from '@/utils/cbi';
+
 import { useWindowSize } from '@vueuse/core';
 import { BarChart, LineChart } from 'echarts/charts';
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { nextTick, onMounted, ref, watch, computed, defineProps } from 'vue';
+import { computed, defineProps, nextTick, onMounted, ref, watch } from 'vue';
 
+import { ISystemOverview } from '@/api/model/systemOverview';
 // 导入样式
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
-import { changeChartsTheme } from '@/utils/color';
 
-import { constructInitDashboardDataset } from '../index';
-
-import '@/utils/cbi';
-
-import { ISystemOverview } from '@/api/model/systemOverview';
 const props = defineProps({
-  SystemOverview: {} as any as ISystemOverview,
+  SystemOverview: {} as ISystemOverview | any,
 });
 
 echarts.use([LineChart, BarChart, CanvasRenderer]);
-const memoryInfoRef = ref({
-  total: 522846208,
-  shared: 1646592,
-  free: 410247168,
-  cached: 29904896,
-  available: 388775936,
-  buffered: 8536064,
-});
 
 const memoryInfo = computed(() => {
-  const cached = `${parseInt(memoryInfoRef.value.cached / 1024 / 1024)} MB`;
-  const available = `${parseInt(memoryInfoRef.value.available / 1024 / 1024)} MB`;
-  const availablePercentage = parseInt((memoryInfoRef.value.available / memoryInfoRef.value.total) * 100);
-  const cachedPercentage = parseInt((memoryInfoRef.value.cached / memoryInfoRef.value.total) * 100);
+  const memoryInfoRef = (props.SystemOverview as any).memory;
+  const cached = `${parseInt((memoryInfoRef.cached / 1024 / 1024).toString(), 10)} MB`;
+  const available = `${parseInt((memoryInfoRef.available / 1024 / 1024).toString(), 10)} MB`;
+  const availablePercentage = parseInt(((memoryInfoRef.available / memoryInfoRef.total) * 100).toString(), 10);
+  const cachedPercentage = parseInt(((memoryInfoRef.cached / memoryInfoRef.total) * 100).toString(), 10);
   const cachedLabel = `${cached}<br>${cachedPercentage}`;
   const availableLabel = `${available}\r\n${availablePercentage}`;
   return {
-    total: parseInt(memoryInfoRef.value.total / 1024 / 1024) + ' MB',
+    total: `${parseInt((memoryInfoRef.total / 1024 / 1024).toString(), 10)} MB`,
     availablePercentage,
     cachedPercentage,
     available,
     cached,
-    // shared: parseInt(memoryInfoRef.value.shared / 1024 / 1024) + ' MB',
-    // free: parseInt(memoryInfoRef.value.free / 1024 / 1024) + ' MB',
-    // buffered: parseInt(memoryInfoRef.value.buffered / 1024 / 1024) + ' MB',
+    // shared: parseInt((memoryInfoRef.shared / 1024 / 1024) + ' MB',
+    // free: parseInt((memoryInfoRef.free / 1024 / 1024) + ' MB',
+    // buffered: parseInt((memoryInfoRef.buffered / 1024 / 1024) + ' MB',
   };
 });
 
-const openNetworkSetting = () => {};
-
 const store = useSettingStore();
 const resizeTime = ref(1);
-
-const PANE_LIST = [
-  {
-    title: 'pages.dashboard.topPanel.memory',
-    type: 'memory',
-    number: '¥ 28,425.00',
-    upTrend: '20.5%',
-    leftType: 'echarts-line',
-    total: 522846208,
-    shared: 1646592,
-    free: 410247168,
-    cached: 29904896,
-    available: 388775936,
-    buffered: 8536064,
-  },
-  {
-    title: 'pages.dashboard.topPanel.card2',
-    number: '¥ 768.00',
-    downTrend: '20.5%',
-    leftType: 'echarts-bar',
-  },
-  {
-    title: 'pages.dashboard.topPanel.card3',
-    number: '1126',
-    upTrend: '20.5%',
-    leftType: 'icon-usergroup',
-  },
-  {
-    title: 'pages.dashboard.topPanel.card4',
-    number: 527,
-    downTrend: '20.5%',
-    leftType: 'icon-file-paste',
-  },
-];
-
-// moneyCharts
-let moneyContainer: HTMLElement;
-let moneyChart: echarts.ECharts;
-const renderMoneyChart = () => {
-  if (!moneyContainer) {
-    moneyContainer = document.getElementById('moneyContainer');
-  }
-  moneyChart = echarts.init(moneyContainer);
-  moneyChart.setOption(constructInitDashboardDataset('line'));
-};
-
-// refundCharts
-let refundContainer: HTMLElement;
-let refundChart: echarts.ECharts;
-const renderRefundChart = () => {
-  if (!refundContainer) {
-    refundContainer = document.getElementById('refundContainer');
-  }
-  refundChart = echarts.init(refundContainer);
-  refundChart.setOption(constructInitDashboardDataset('bar'));
-};
-
-const renderCharts = () => {
-  renderMoneyChart();
-  renderRefundChart();
-};
 
 // chartSize update
 const updateContainer = () => {
@@ -278,7 +185,7 @@ const updateContainer = () => {
 };
 
 onMounted(() => {
-  renderCharts();
+  // renderCharts();
   nextTick(() => {
     updateContainer();
   });
@@ -289,23 +196,23 @@ watch([width, height], () => {
   updateContainer();
 });
 
-watch(
-  () => store.brandTheme,
-  () => {
-    changeChartsTheme([refundChart]);
-  },
-);
+// watch(
+//   () => store.brandTheme,
+//   () => {
+//     changeChartsTheme([refundChart]);
+//   },
+// );
 
-watch(
-  () => store.mode,
-  () => {
-    [moneyChart, refundChart].forEach((item) => {
-      item.dispose();
-    });
+// watch(
+//   () => store.mode,
+//   () => {
+//     [moneyChart, refundChart].forEach((item) => {
+//       item.dispose();
+//     });
 
-    renderCharts();
-  },
-);
+//     renderCharts();
+//   },
+// );
 </script>
 
 <style lang="less" scoped>

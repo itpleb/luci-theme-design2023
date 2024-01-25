@@ -1,0 +1,17 @@
+{
+  "name": "cbijs",
+  "version": "1.0.7",
+  "description": "cbi.js",
+  "main": "index.js",
+  "types": "cbi.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/cbi-module.git"
+  }
+}

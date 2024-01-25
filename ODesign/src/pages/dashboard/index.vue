@@ -9,7 +9,7 @@
           <t-card
             :title="$t('pages.dashboard.topPanel.system')"
             :bordered="false"
-            :class="{ 'dashboard-item systemOverview-1': true, 'dashboard-item--main-color': '0' == -1110 }"
+            :class="{ 'dashboard-item systemOverview-1': true, 'dashboard-item--main-color': false }"
           >
             <!-- <template #actions>
             <t-radio-group default-value="dateVal" variant="default-filled">
@@ -57,7 +57,7 @@
           <t-card
             :title="'IPv4 WAN ' + t('pages.dashboard.state')"
             :bordered="false"
-            :class="{ 'dashboard-item': true, 'dashboard-item--main-color': '0' == -1110 }"
+            :class="{ 'dashboard-item': true, 'dashboard-item--main-color': false }"
           >
             <template #actions>
               <a :href="SystemOverviewRef.wan.link" style="line-height: 24px; color: blue">{{
@@ -77,10 +77,10 @@
               </t-list-item>
               <t-list-item v-if="SystemOverviewRef.wan.expires > 0">
                 到期时间：{{
-                  SystemOverviewRef.wan.expires > -1 ? String.format('%t', SystemOverviewRef.wan.expires) : ''
+                  SystemOverviewRef.wan.expires > -1 ? StringExtensions.format('%t', SystemOverviewRef.wan.expires) : ''
                 }}
               </t-list-item>
-              <t-list-item> 已连接：{{ String.format('%t', SystemOverviewRef.wan.uptime) }} </t-list-item>
+              <t-list-item> 已连接：{{ StringExtensions.format('%t', SystemOverviewRef.wan.uptime) }} </t-list-item>
             </t-list>
           </t-card>
         </t-col>
@@ -110,7 +110,7 @@ import { ref } from 'vue';
 
 // 导入样式
 import { t } from '@/locales';
-
+import { StringExtensions } from '@/utils/cbi';
 const SystemOverviewRef = ref({
   memcached: '45468\n',
   swap: {

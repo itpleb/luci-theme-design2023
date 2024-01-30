@@ -102,15 +102,18 @@ export default {
 </script>
 
 <script setup lang="ts">
-import MiddleChart from './components/MiddleChart.vue';
-import OutputOverview from './components/OutputOverview.vue';
-import ApList from './components/ApList.vue';
-import TopPanel from './components/TopPanel.vue';
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
+import { getSystemOverviewStatus } from '@/api/apm';
 // 导入样式
 import { t } from '@/locales';
 import { StringExtensions } from '@/utils/cbi';
+
+import ApList from './components/ApList.vue';
+import MiddleChart from './components/MiddleChart.vue';
+import OutputOverview from './components/OutputOverview.vue';
+import TopPanel from './components/TopPanel.vue';
+
 const SystemOverviewRef = ref({
   memcached: '45468\n',
   swap: {
@@ -122,19 +125,19 @@ const SystemOverviewRef = ref({
     {
       expires: 33504,
       macaddr: '70:a6:cc:75:5c:d8',
-      ipaddr: '192.168.7.167',
+      ipaddr: 'localhost:504367',
       hostname: 'DESKTOP-JTI27UF',
     },
     {
       expires: 33491,
       macaddr: '70:a6:cc:75:5c:d8',
-      ipaddr: '192.168.7.166',
+      ipaddr: 'localhost:504366',
       hostname: 'WRH',
     },
     {
       expires: 33297,
       macaddr: '02:32:4a:56:4e:72',
-      ipaddr: '192.168.7.162',
+      ipaddr: 'localhost:504362',
       hostname: false,
     },
     {
@@ -146,13 +149,13 @@ const SystemOverviewRef = ref({
     {
       expires: 41536,
       macaddr: '8a:0b:19:27:32:6f',
-      ipaddr: '192.168.7.164',
+      ipaddr: 'localhost:504364',
       hostname: 'OpenWrt',
     },
     {
       expires: 41534,
       macaddr: 'bc:ff:4d:4a:f7:74',
-      ipaddr: '192.168.7.127',
+      ipaddr: 'localhost:504327',
       hostname: 'ESP_4AF774',
     },
   ],
@@ -216,6 +219,32 @@ const systemRef = ref({
     kernel: '5.4.266',
     system: 'MediaTek MT7621 ver:1 eco:3',
   },
+});
+
+const refreashSystemStatusStarting = ref(false);
+onMounted(() => {
+  refreashSystemStatusStarting.value = true;
+  console.log('refreashSystemStatus');
+  const refreashSystemStatus = async () => {
+    try {
+      if (!refreashSystemStatusStarting.value) {
+        return;
+      }
+      const result = await getSystemOverviewStatus();
+      if (result && result.data) {
+        console.log('refreashSystemStatus data', result.data);
+        SystemOverviewRef.value = result.data;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setTimeout(refreashSystemStatus, 3000);
+  };
+  setTimeout(refreashSystemStatus, 1000);
+});
+
+onBeforeUnmount(() => {
+  refreashSystemStatusStarting.value = false;
 });
 </script>
 

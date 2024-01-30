@@ -112,6 +112,7 @@ const transform: AxiosTransform = {
 
   // 请求拦截器处理
   requestInterceptors: (config, options) => {
+    console.log('请求拦截器处理');
     // 请求之前处理config
     const userStore = useUserStore();
     const { token } = userStore;
@@ -122,6 +123,10 @@ const transform: AxiosTransform = {
         ? `${options.authenticationScheme} ${token}`
         : token;
     }
+    // if (token && (config as any).withCredentials) {
+    //   document.cookie = `sysauth=${token};path=/cgi-bin/luci/`;
+    //   (config as Recordable).headers.Cookie = `sysauth=${token};path=/cgi-bin/luci/`;
+    // }
     return config;
   },
 
@@ -151,7 +156,7 @@ const transform: AxiosTransform = {
   },
 };
 
-function createAxios(opt?: Partial<CreateAxiosOptions>) {
+export function createAxios(opt?: Partial<CreateAxiosOptions>) {
   return new VAxios(
     merge(
       <CreateAxiosOptions>{
@@ -161,7 +166,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // 超时
         timeout: 10 * 1000,
         // 携带Cookie
-        withCredentials: false, // 666
+        withCredentials: opt?.withCredentials ? opt.withCredentials : false, // 666
         // 头信息
         headers: { 'Content-Type': ContentTypeEnum.Json },
         // 数据处理方式

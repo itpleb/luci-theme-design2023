@@ -25,8 +25,13 @@ export default {
   },
   topPanel: {
     memory: '内存',
+    totalMemory: '总内存',
     memoryAvailable: '内存可用数',
     memoryCached: '内存已缓存',
+
+    memoryAvailableMB: '可用内存',
+    memoryCachedB: '缓存内存',
+
     networks: '网络',
     system: '系统',
     cpuusage: 'CPU 使用率',
@@ -35,6 +40,12 @@ export default {
     onlineUser: '在线用户数',
     onlineConnection: '活动连接',
     averageLoad: '平均负载',
+
+    inbound: '入站：',
+    average: '平均：',
+    outbound: '出站：',
+    peak: '峰值：',
+
     card2: '总退款',
     card3: '活跃用户（个）',
     card4: '产生订单（个）',

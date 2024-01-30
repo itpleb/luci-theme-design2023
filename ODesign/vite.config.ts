@@ -48,10 +48,23 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       //   [VITE_API_URL_PREFIX]: 'http://127.0.0.1:3000/',
       // },
       proxy: {
-        '/cgi-bin/luci/apm': {
-          target: 'http://192.168.6.1/cgi-bin/luci/apm/',
+        '/cgi-bin': {
+          target: 'http://localhost:5043/cgi-bin',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/\/cgi-bin\/luci\/apm\//, ''),
+          rewrite: (path) => path.replace(/^\/cgi-bin\//, ''),
+          secure: false,
+          cookiePathRewrite: {
+            '/cgi-bin/luci/': '/',
+          },
+          cookieDomainRewrite: {
+            'localhost:5043': 'localhost:3002',
+          },
+          onProxyReq: (proxyReq: any, req: any, res: any) => {
+            // 可选：在请求头中携带Cookie
+            if (req.headers.cookie) {
+              proxyReq.setHeader('cookie', req.headers.cookie);
+            }
+          },
         },
       },
     },

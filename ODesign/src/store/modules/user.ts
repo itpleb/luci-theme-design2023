@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
+
+import { login as luciLogin } from '@/api/apm';
 import { usePermissionStore } from '@/store';
 import type { UserInfo } from '@/types/interface';
-import { login as luciLogin } from '@/api/apm';
 
 const InitUserInfo: UserInfo = {
   name: '', // 用户名，用于展示在页面右上角头像处
@@ -65,6 +66,10 @@ export const useUserStore = defineStore('user', {
       // const res = await mockLogin(userInfo);
       if (res.code === 200) {
         this.token = res.data;
+        const cookie = res.data;
+
+        document.cookie = `sysauth=${cookie}`;
+
         this.setUserInfo({
           name: userInfo.account,
           roles: ['all'],

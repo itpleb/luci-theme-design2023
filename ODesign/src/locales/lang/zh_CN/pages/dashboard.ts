@@ -7,6 +7,7 @@ export default {
   firmwareVersion: '固件版本',
   kernelVersion: '内核版本',
   state: '状态',
+  notConnected: '未连接',
   outputOverview: {
     title: '出入库概览',
     subtitle: '(件)',

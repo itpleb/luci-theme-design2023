@@ -2,88 +2,146 @@
   <div>
     <!-- 顶部 card  -->
     <top-panel class="row-container" :SystemOverview="SystemOverviewRef" />
-
     <div class="row-container">
       <t-row :gutter="[16, 16]">
-        <t-col :xs="6" :xl="3">
-          <t-card
-            :title="$t('pages.dashboard.topPanel.system')"
-            :bordered="false"
-            :class="{ 'dashboard-item systemOverview-1': true, 'dashboard-item--main-color': false }"
-          >
-            <!-- <template #actions>
-            <t-radio-group default-value="dateVal" variant="default-filled">
-              <t-radio-button value="dateVal">{{ $t('pages.dashboard.rankList.week') }}</t-radio-button>
-              <t-radio-button value="monthVal">{{ $t('pages.dashboard.rankList.month') }}</t-radio-button>
-            </t-radio-group>
-          </template> -->
-            <div class="t-table t-size-s t-table--striped t-table--column-resizable systemOverview" tabindex="0">
-              <div class="t-table__content">
-                <table class="t-table--layout-auto">
-                  <tbody class="t-table__body">
-                    <tr class="">
-                      <td class="title">{{ t('pages.dashboard.deviceModel') }}</td>
-                      <td class="content">{{ systemRef.boardinfo.model }}</td>
-                    </tr>
-                    <tr class="">
-                      <td class="title">{{ t('pages.dashboard.cpuinfo') }}</td>
-                      <td class="content">{{ SystemOverviewRef.cpuinfo }}</td>
-                    </tr>
-                    <!-- <tr class="">
-                      <td class="title">{{ t('pages.dashboard.temperature') }}</td>
-                      <td class="content">{{ SystemOverviewRef.temperature }}</td>
-                    </tr> -->
-                    <tr class="">
-                      <td class="title">{{ t('pages.dashboard.targetPlatform') }}</td>
-                      <td class="content">{{ systemRef.boardinfo.release.target }}</td>
-                    </tr>
-                    <tr class="">
-                      <td class="title">{{ t('pages.dashboard.firmwareVersion') }}</td>
-                      <td class="content">
-                        {{ systemRef.boardinfo.release.distribution + ' ' + systemRef.boardinfo.release.revision }}
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="title">{{ t('pages.dashboard.kernelVersion') }}</td>
-                      <td class="content">{{ systemRef.boardinfo.kernel }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </t-card>
-        </t-col>
-        <t-col :xs="6" :xl="3">
+        <t-col :xs="12" :xl="3">
           <t-card
             :title="'IPv4 WAN ' + t('pages.dashboard.state')"
             :bordered="false"
             :class="{ 'dashboard-item': true, 'dashboard-item--main-color': false }"
           >
-            <template #actions>
-              <a :href="SystemOverviewRef.wan.link" style="line-height: 24px; color: blue">{{
-                SystemOverviewRef.wan.ifname
-              }}</a>
-            </template>
-            <t-list>
-              <t-list-item> WAN 类型：{{ SystemOverviewRef.wan.proto }} </t-list-item>
-              <t-list-item> 地址：{{ SystemOverviewRef.wan.ipaddr }} </t-list-item>
-              <t-list-item> 子网掩码：{{ SystemOverviewRef.wan.netmask }} </t-list-item>
-              <t-list-item> 网关：{{ SystemOverviewRef.wan.gwaddr }} </t-list-item>
-              <t-list-item v-if="SystemOverviewRef.wan.dns.length > 0">
-                DNS 1：{{ SystemOverviewRef.wan.dns.length > 0 ? SystemOverviewRef.wan.dns[0] : '' }}
-              </t-list-item>
-              <t-list-item v-if="SystemOverviewRef.wan.dns.length > 1">
-                DNS 2：{{ SystemOverviewRef.wan.dns.length > 1 ? SystemOverviewRef.wan.dns[1] : '' }}
-              </t-list-item>
-              <t-list-item v-if="SystemOverviewRef.wan.expires > 0">
-                到期时间：{{
-                  SystemOverviewRef.wan.expires > -1 ? StringExtensions.format('%t', SystemOverviewRef.wan.expires) : ''
-                }}
-              </t-list-item>
-              <t-list-item> 已连接：{{ StringExtensions.format('%t', SystemOverviewRef.wan.uptime) }} </t-list-item>
-            </t-list>
+            <t-row :gutter="16">
+              <t-col flex="16px" align="center">
+                <img src="/resources/icons/ethernet.png" />
+
+                <small>
+                  <t-link v-if="systemOverviewWan.link" :href="systemOverviewWan.link" theme="primary">
+                    {{ systemOverviewWan?.ifname !== '' ? systemOverviewWan?.ifname : '?' }}</t-link
+                  >
+                  {{ systemOverviewWan?.ifname !== '' ? '' : '?' }}
+                </small>
+              </t-col>
+              <t-col flex="auto">
+                <t-list>
+                  <t-list-item-meta
+                    v-if="!systemOverviewWan.link"
+                    :description="t('pages.dashboard.notConnected')"
+                  ></t-list-item-meta>
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.proto"
+                    :description="'WAN 类型：' + systemOverviewWan.proto"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.ipaddr"
+                    :description="'地址：' + systemOverviewWan.ipaddr"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.netmask"
+                    :description="'子网掩码：' + systemOverviewWan.netmask"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.gwaddr"
+                    :description="'网关：' + systemOverviewWan.gwaddr"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.dns.length > 0"
+                    :description="'DNS 1：' + (systemOverviewWan.dns.length > 0 ? systemOverviewWan.dns[0] : '')"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.dns.length > 1"
+                    :description="'DNS 2：' + (systemOverviewWan.dns.length > 1 ? systemOverviewWan.dns[1] : '')"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.expires > 0"
+                    :description="
+                      '到期时间：' +
+                      (systemOverviewWan.expires > -1 ? StringExtensions.format('%t', systemOverviewWan.expires) : '')
+                    "
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan.ifname"
+                    :description="'已连接：' + StringExtensions.format('%t', systemOverviewWan.uptime)"
+                  ></t-list-item-meta>
+                </t-list>
+              </t-col>
+            </t-row>
+          </t-card>
+          <t-card
+            :title="'IPv6 WAN ' + t('pages.dashboard.state')"
+            :bordered="false"
+            :class="{ 'dashboard-item': true, 'dashboard-item--main-color': false }"
+          >
+            <t-row :gutter="16">
+              <t-col flex="16px" align="center">
+                <img src="/resources/icons/ethernet.png" />
+                <small
+                  ><t-link v-if="systemOverviewWan6.link" :href="systemOverviewWan6.link" theme="primary">{{
+                    systemOverviewWan6?.ifname !== '' ? systemOverviewWan6?.ifname : '?'
+                  }}</t-link>
+                  {{ systemOverviewWan6?.ifname !== '' ? '' : '?' }}
+                </small>
+              </t-col>
+              <t-col flex="auto">
+                <t-list>
+                  <t-list-item-meta
+                    v-if="!systemOverviewWan6.link"
+                    :description="t('pages.dashboard.notConnected')"
+                  ></t-list-item-meta>
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.proto"
+                    :description="'WAN 类型：' + systemOverviewWan6.proto"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.ipaddr"
+                    :description="'地址：' + systemOverviewWan6.ipaddr"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.netmask"
+                    :description="'子网掩码：' + systemOverviewWan6.netmask"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.gwaddr"
+                    :description="'网关：' + systemOverviewWan6.gwaddr"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.dns.length > 0"
+                    :description="'DNS 1：' + (systemOverviewWan6.dns.length > 0 ? systemOverviewWan6.dns[0] : '')"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.dns.length > 1"
+                    :description="'DNS 2：' + (systemOverviewWan6.dns.length > 1 ? systemOverviewWan6.dns[1] : '')"
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.expires > 0"
+                    :description="
+                      '到期时间：' +
+                      (systemOverviewWan6.expires > -1 ? StringExtensions.format('%t', systemOverviewWan6.expires) : '')
+                    "
+                  ></t-list-item-meta>
+
+                  <t-list-item-meta
+                    v-if="systemOverviewWan6.ifname"
+                    :description="'已连接：' + StringExtensions.format('%t', systemOverviewWan6.uptime)"
+                  ></t-list-item-meta>
+                </t-list>
+              </t-col>
+            </t-row>
           </t-card>
         </t-col>
+        <t-col :xs="12" :xl="9"> </t-col>
       </t-row>
     </div>
     <!-- AP 列表 -->
@@ -102,7 +160,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import { getSystemOverviewStatus } from '@/api/apm';
 // 导入样式
@@ -201,8 +259,35 @@ const SystemOverviewRef = ref({
   localtime: 'Wed Jan 24 00:48:52 2024',
   cpuusage: '0%',
   loadavg: [0, 0, 0],
+  wan6: {} as any,
 });
 
+const systemOverviewWan = computed(() => {
+  return {
+    proto: SystemOverviewRef.value?.wan?.proto ?? '',
+    ipaddr: SystemOverviewRef.value?.wan?.ipaddr ?? '',
+    link: SystemOverviewRef.value?.wan?.link ?? '',
+    netmask: SystemOverviewRef.value?.wan?.netmask ?? '',
+    gwaddr: SystemOverviewRef.value?.wan?.gwaddr ?? '',
+    expires: SystemOverviewRef.value?.wan?.expires ?? -1,
+    uptime: SystemOverviewRef.value?.wan?.uptime ?? 0,
+    ifname: SystemOverviewRef.value?.wan?.ifname ?? '',
+    dns: SystemOverviewRef.value?.wan?.dns ?? [],
+  };
+});
+const systemOverviewWan6 = computed(() => {
+  return {
+    proto: SystemOverviewRef.value?.wan6?.proto ?? '',
+    ipaddr: SystemOverviewRef.value?.wan6?.ipaddr ?? '',
+    link: SystemOverviewRef.value?.wan6?.link ?? '',
+    netmask: SystemOverviewRef.value?.wan6?.netmask ?? '',
+    gwaddr: SystemOverviewRef.value?.wan6?.gwaddr ?? '',
+    expires: SystemOverviewRef.value?.wan6?.expires ?? -1,
+    uptime: SystemOverviewRef.value?.wan6?.uptime ?? 0,
+    ifname: SystemOverviewRef.value?.wan6?.ifname ?? '',
+    dns: SystemOverviewRef.value?.wan6?.dns ?? [],
+  };
+});
 const systemRef = ref({
   boardinfo: {
     board_name: 'jdcloud,re-sp-01b',

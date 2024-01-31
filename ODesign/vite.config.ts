@@ -59,12 +59,6 @@ export default ({ mode }: ConfigEnv): UserConfig => {
           cookieDomainRewrite: {
             'localhost:5043': 'localhost:3002',
           },
-          onProxyReq: (proxyReq: any, req: any, res: any) => {
-            // 可选：在请求头中携带Cookie
-            if (req.headers.cookie) {
-              proxyReq.setHeader('cookie', req.headers.cookie);
-            }
-          },
         },
       },
     },

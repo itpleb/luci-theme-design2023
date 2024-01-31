@@ -8,6 +8,17 @@ export default {
   kernelVersion: '内核版本',
   state: '状态',
   notConnected: '未连接',
+  DhcpList: {
+    assignment: '分配',
+    columns: {
+      hostname: '主机名',
+      ipaddr: 'IPv4 地址',
+      macaddr: 'MAC 地址',
+      remainingLeaseTerm: '剩余租期',
+      ipaddrV6: 'IPv6 地址',
+      DUID: 'DUID',
+    },
+  },
   outputOverview: {
     title: '出入库概览',
     subtitle: '(件)',

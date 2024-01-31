@@ -141,7 +141,7 @@
             </t-row>
           </t-card>
         </t-col>
-        <t-col :xs="12" :xl="9"> </t-col>
+        <t-col :xs="12" :xl="9"> <dhcp-list :SystemOverview="SystemOverviewRef" class="row-container" /> </t-col>
       </t-row>
     </div>
     <!-- AP 列表 -->
@@ -168,6 +168,7 @@ import { t } from '@/locales';
 import { StringExtensions } from '@/utils/cbi';
 
 import ApList from './components/ApList.vue';
+import DhcpList from './components/DhcpList.vue';
 import MiddleChart from './components/MiddleChart.vue';
 import OutputOverview from './components/OutputOverview.vue';
 import TopPanel from './components/TopPanel.vue';
@@ -185,52 +186,6 @@ const SystemOverviewRef = ref({
       macaddr: '70:a6:cc:75:5c:d8',
       ipaddr: 'localhost:504367',
       hostname: 'DESKTOP-JTI27UF',
-    },
-    {
-      expires: 33491,
-      macaddr: '70:a6:cc:75:5c:d8',
-      ipaddr: 'localhost:504366',
-      hostname: 'WRH',
-    },
-    {
-      expires: 33297,
-      macaddr: '02:32:4a:56:4e:72',
-      ipaddr: 'localhost:504362',
-      hostname: false,
-    },
-    {
-      expires: 25834,
-      macaddr: '22:18:3a:d2:7e:bd',
-      ipaddr: '192.168.7.225',
-      hostname: 'HONOR-90',
-    },
-    {
-      expires: 41536,
-      macaddr: '8a:0b:19:27:32:6f',
-      ipaddr: 'localhost:504364',
-      hostname: 'OpenWrt',
-    },
-    {
-      expires: 41534,
-      macaddr: 'bc:ff:4d:4a:f7:74',
-      ipaddr: 'localhost:504327',
-      hostname: 'ESP_4AF774',
-    },
-  ],
-  userinfo: '12\n',
-  wifinets: [],
-  leases6: [
-    {
-      expires: 33491,
-      hostname: 'DESKTOP-JTI27UF',
-      duid: '000100012c43224500155d026916',
-      ip6addr: 'fd26:f291:10c7::17d\/128',
-    },
-    {
-      expires: 33470,
-      hostname: 'WRH',
-      duid: '000100012a3fcd4300e070e9d170',
-      ip6addr: 'fd26:f291:10c7::7d5\/128',
     },
   ],
   conncount: 1314,
@@ -287,23 +242,6 @@ const systemOverviewWan6 = computed(() => {
     ifname: SystemOverviewRef.value?.wan6?.ifname ?? '',
     dns: SystemOverviewRef.value?.wan6?.dns ?? [],
   };
-});
-const systemRef = ref({
-  boardinfo: {
-    board_name: 'jdcloud,re-sp-01b',
-    rootfs_type: 'squashfs',
-    hostname: 'OpenWrt',
-    release: {
-      distribution: 'OpenWrt',
-      revision: 'R23.11.11',
-      version: 'SNAPSHOT',
-      target: 'ramips/mt7621',
-      description: 'OpenWrt ',
-    },
-    model: 'JDCloud RE-SP-01B',
-    kernel: '5.4.266',
-    system: 'MediaTek MT7621 ver:1 eco:3',
-  },
 });
 
 const refreashSystemStatusStarting = ref(false);
